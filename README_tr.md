@@ -180,8 +180,8 @@ ABP, **ASP.NET Core** için geliştirilmiş, **modern ve açık kaynak** bir uyg
 ## 📦 Kurulum (Planlanıyor)
 
 ```bash
-git clone https://github.com/kullanici-adi/vizyo-digital-signage.git
-cd vizyo-digital-signage
+git clone https://github.com/vizyosignage/vizyo-display-manager.git
+cd vizyo-display-manager
 ```
 
 Kurulum ve dağıtım dokümantasyonu eklenecektir.
