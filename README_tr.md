@@ -1,28 +1,26 @@
 # Vizyo Digital Signage
 
 **Vizyo Digital Signage**, **açık kaynak**, **platformdan bağımsız** bir **dijital signage içerik yönetim sistemi (CMS)**’dir.
-Tek ekranlı self servis kullanımdan, yerel ağ üzerinde çalışan ekran gruplarına ve internet üzerinden yönetilen büyük ölçekli yapılara kadar esnek bir mimari sunar.
+Tek ekranlı self servis kullanımlardan, yerel ağ üzerindeki ekran gruplarına ve internet üzerinden merkezi olarak yönetilen büyük ölçekli yapılara kadar esnek bir şekilde çalışacak biçimde tasarlanmıştır.
 
-Sistem;
+Sistem şu özelliklere sahiptir:
 
-* **Eklenti (plugin) tabanlı yapı**
+* **Eklenti (plugin) tabanlı mimari**
 * **Avalonia AXAML + C# Script** ile genişletilebilirlik
-* **ABP Framework** tabanlı web CMS
-* **Platforma göre ayrılmış CMS / Client çalışma modeli**
-
-özelliklerine sahiptir.
+* **ABP Framework** ile geliştirilmiş **web tabanlı CMS**
+* **Platforma duyarlı CMS / Client çalışma modeli**
 
 ---
 
 ## 🚀 Genel Bakış
 
-Vizyo, kullanım senaryosuna göre **CMS ve Client uygulamalarını birlikte veya ayrı** çalıştırabilen bir yapıdadır.
+Vizyo, kullanım senaryosuna bağlı olarak **CMS ve Client uygulamalarının birlikte veya ayrı** çalışabildiği **modüler ve ölçeklenebilir** bir mimari sunar.
 
 ### Desteklenen Çalışma Modları
 
 * **Standalone (Self Servis)**
-* **Yerel Ağ (Lokal Network)**
-* **Merkezi / Hosting (Bulut veya Sunucu)**
+* **Yerel Ağ**
+* **Merkezi / Hosting (Bulut veya Sunucu Tabanlı)**
 
 ---
 
@@ -30,117 +28,152 @@ Vizyo, kullanım senaryosuna göre **CMS ve Client uygulamalarını birlikte vey
 
 ### 🧩 Standalone (Self Servis Mod)
 
-* **CMS ve Client uygulaması aynı cihazda birlikte çalışır**
+* **CMS ve Client uygulamaları aynı cihazda birlikte çalışır**
 * Her ekran kendi içeriğini kendisi yönetir
-* Sunucu ve internet gerekmez
-* **Sadece Windows ve Linux desktop sürümlerinde desteklenir**
+* Sunucu veya internet bağlantısı gerekmez
+* **Yalnızca Windows ve Linux masaüstü platformlarında desteklenir**
 
 📌 Kullanım alanları:
 
 * Kiosk sistemleri
-* Tek ekranlı mağaza / ofis ekranları
+* Tek ekranlı mağaza veya ofis ekranları
 
 ---
 
-### 🔗 Yerel Ağ (Lokal Network Modu)
+### 🔗 Yerel Ağ Modu
 
-* Aynı ağdaki ekranlardan biri:
+* Yerel ağdaki bir cihaz:
 
   * **CMS + Client** olarak çalışır (yerel sunucu)
 * Diğer ekranlar:
 
   * **Sadece Client** olarak bağlanır
 * İnternet bağlantısı gerekmez
-* **CMS barındıran cihazlar yalnızca Windows ve Linux desktop** olabilir
+* **CMS barındıran cihazların Windows veya Linux masaüstü çalıştırması gerekir**
 
 📌 Kullanım alanları:
 
 * Okullar
 * Ofisler
-* Bina içi çoklu ekran sistemleri
+* Tek lokasyon içindeki çok ekranlı kurulumlar
 
 ---
 
 ### 🌐 Merkezi / Hosting Modu
 
-* CMS:
+* CMS şu ortamlarda çalışır:
 
-  * **Sunucu veya hosting ortamında**
+  * **Bir sunucu veya hosting ortamı**
   * **ABP Framework tabanlı Web CMS**
-* Client uygulamalar:
-
-  * İnternet üzerinden CMS’e bağlanır
-* Farklı lokasyonlardaki ekranlar merkezi olarak yönetilir
+* Client uygulamaları CMS’e internet üzerinden bağlanır
+* Ekranlar birden fazla lokasyondan yönetilebilir
 
 📌 Kullanım alanları:
 
-* Kurumsal yapılar
+* Kurumsal dağıtımlar
 * Zincir mağazalar
-* Çok lokasyonlu ekran ağları
+* Çok lokasyonlu signage ağları
 
 ---
 
 ## 📱 Platform Desteği
 
-### 🖥️ Windows & Linux (Desktop)
+### 🖥️ Windows & Linux (Masaüstü)
 
-* CMS + Client **aynı cihazda birlikte çalışabilir**
-* Self servis ve lokal network modları desteklenir
+* CMS ve Client **aynı cihazda birlikte çalışabilir**
+* **Standalone** ve **Yerel Ağ** modları desteklenir
 * Eklenti geliştirme ve CMS yönetimi yapılabilir
 
 ### 🤖 Android
 
-* **Sadece Client uygulaması çalışır**
-* CMS barındırılmaz
+* **Yalnızca Client uygulaması çalışır**
+* Android üzerinde CMS çalışmaz
 * İçerik yönetimi:
 
-  * Yerel ağdaki bir CMS üzerinden
-  * veya merkezi (hosting) CMS üzerinden yapılır
-* Hafif, stabil ve ekran odaklı kullanım için tasarlanmıştır
+  * Yerel ağdaki bir CMS üzerinden veya
+  * Merkezi (hosting) bir CMS üzerinden yapılır
+* Hafif, stabil ve ekran odaklı kullanım için optimize edilmiştir
 
 ---
 
 ## 🧩 Eklenti (Plugin) Tabanlı Mimari
 
+Vizyo, **tamamen genişletilebilir** olacak şekilde tasarlanmıştır.
+
 * Kullanıcılar kendi eklentilerini geliştirebilir
 * Eklenti teknolojileri:
 
-  * **Avalonia UI (AXAML)** → Arayüz
-  * **C# Script** → İş mantığı
+  * **Avalonia UI (AXAML)** → Kullanıcı arayüzleri
+  * **C# Script** → Mantık ve davranışlar
 * Eklentiler ile:
 
   * Özel widget’lar
-  * Dinamik veri ekranları
-  * Etkileşimli içerikler
-    oluşturulabilir
-* Çekirdek sistem değiştirilmeden genişletilebilir
+  * Dinamik, veri odaklı ekranlar
+  * Etkileşimli signage bileşenleri
+    geliştirilebilir
+* Çekirdek sistem değiştirilmeden yeni işlevler eklenebilir
 
 ---
 
 ## 🌐 Web Tabanlı CMS (ABP Framework)
 
-Vizyo Web CMS, **ABP Framework** kullanılarak geliştirilmiştir.
+Vizyo Web CMS, **ABP Framework** kullanılarak geliştirilmiştir ve modern, kurumsal seviyede bir altyapı sunar.
 
-### ABP’nin Vizyo’ya Sağladığı Avantajlar
+### Neden ABP Framework?
 
-* Modüler mimari
-* Multi-Tenancy (çok kiracılı yapı)
-* Rol ve yetkilendirme sistemi
-* Güvenli kimlik doğrulama (JWT, OAuth2, OpenID Connect)
-* RESTful API altyapısı
-* Hazır yönetim panelleri
-* Çok dilli destek
-* Veritabanı bağımsızlığı
+ABP, **ASP.NET Core** için geliştirilmiş, **modern ve açık kaynak** bir uygulama framework’üdür. Yerleşik en iyi pratikler ve kurumsal seviye özellikler sunar.
+
+### 🔑 Vizyo’da Kullanılan ABP Temel Özellikleri
+
+* **Modüler Mimari**
+
+  * Temiz sorumluluk ayrımı
+  * Kolay genişletilebilirlik ve bakım
+
+* **Multi-Tenancy (Çok Kiracılı Yapı)**
+
+  * Tek CMS üzerinden birden fazla organizasyon veya müşteri yönetimi
+  * SaaS ve büyük ölçekli dağıtımlar için idealdir
+
+* **Rol ve Yetkilendirme Yönetimi**
+
+  * İnce ayarlı erişim kontrolü
+  * Yönetici, editör ve operatör gibi farklı roller
+
+* **Kimlik Doğrulama ve Yetkilendirme**
+
+  * JWT, OAuth2 ve OpenID Connect desteği
+  * API’ler ve yönetim arayüzü için güvenli erişim
+
+* **RESTful API Katmanı**
+
+  * Yapılandırılmış backend API’leri
+  * Client uygulamalarıyla sorunsuz iletişim
+
+* **Hazır Yönetim Arayüzleri**
+
+  * Kullanıma hazır yönetim panelleri
+  * Hızlı geliştirme ve tutarlı kullanıcı deneyimi
+
+* **Veritabanı Soyutlaması**
+
+  * Birden fazla veritabanı sağlayıcısı desteği
+  * Kolay geçiş ve ölçeklenebilirlik
+
+* **Lokalizasyon**
+
+  * Çok dilli destek
+  * Global dağıtımlar için hazır altyapı
 
 ---
 
-## 🏗️ Özet Mimari Tablosu
+## 🏗️ Mimari Özeti
 
-| Mod           | CMS Nerede         | Client       | Desteklenen Platformlar                             |
-| ------------- | ------------------ | ------------ | --------------------------------------------------- |
-| Standalone    | Aynı cihaz         | Aynı cihaz   | Windows, Linux                                      |
-| Lokal Network | Yerel ağda 1 cihaz | Tüm ekranlar | CMS: Windows/Linux<br>Client: Windows/Linux/Android |
-| Hosting       | Sunucu / Cloud     | Tüm ekranlar | Client: Windows/Linux/Android                       |
+| Mod             | CMS Konumu           | Client       | Desteklenen Platformlar                             |
+| --------------- | -------------------- | ------------ | --------------------------------------------------- |
+| Standalone      | Aynı cihaz           | Aynı cihaz   | Windows, Linux                                      |
+| Yerel Ağ        | Yerel ağda bir cihaz | Tüm ekranlar | CMS: Windows/Linux<br>Client: Windows/Linux/Android |
+| Hosting / Bulut | Sunucu / Bulut       | Tüm ekranlar | Client: Windows/Linux/Android                       |
 
 ---
 
@@ -157,12 +190,12 @@ Kurulum ve dağıtım dokümantasyonu eklenecektir.
 
 ## 🛣️ Yol Haritası
 
-* [ ] Desktop CMS + Client entegrasyonu
+* [ ] Masaüstü CMS + Client entegrasyonu
 * [ ] Android Client optimizasyonu
-* [ ] ABP Web CMS
-* [ ] İçerik planlama
+* [ ] ABP tabanlı Web CMS
+* [ ] İçerik zamanlama
 * [ ] Medya yönetimi
-* [ ] Eklenti SDK
+* [ ] Eklenti SDK ve örnekler
 * [ ] Uzaktan izleme
 
 ---
