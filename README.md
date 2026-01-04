@@ -178,8 +178,8 @@ ABP is a **modern, open-source application framework for ASP.NET Core**, offerin
 ## 📦 Installation (Planned)
 
 ```bash
-git clone https://github.com/your-username/vizyo-digital-signage.git
-cd vizyo-digital-signage
+git clone https://github.com/vizyosignage/vizyo-display-manager.git
+cd vizyo-display-manager
 ```
 
 Installation and deployment documentation will be added.
