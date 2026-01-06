@@ -42,9 +42,10 @@ Vizyo, kullanım senaryosuna bağlı olarak **CMS ve Client uygulamalarının bi
 
 ### 🔗 Yerel Ağ Modu
 
-* Yerel ağdaki bir cihaz:
+* Yerel ağdaki bir cihaz veya sunucu:
 
-  * **CMS + Client** olarak çalışır (yerel sunucu)
+  * **CMS + Client** olarak çalışır (bağlı ekranlar / yerel sunucu)
+   
 * Diğer ekranlar:
 
   * **Sadece Client** olarak bağlanır
@@ -55,6 +56,7 @@ Vizyo, kullanım senaryosuna bağlı olarak **CMS ve Client uygulamalarının bi
 
 * Okullar
 * Ofisler
+* Fuar ekranları
 * Tek lokasyon içindeki çok ekranlı kurulumlar
 
 ---
@@ -171,8 +173,8 @@ ABP, **ASP.NET Core** için geliştirilmiş, **modern ve açık kaynak** bir uyg
 
 | Mod             | CMS Konumu           | Client       | Desteklenen Platformlar                             |
 | --------------- | -------------------- | ------------ | --------------------------------------------------- |
-| Standalone      | Aynı cihaz           | Aynı cihaz   | Windows, Linux                                      |
-| Yerel Ağ        | Yerel ağda bir cihaz veya sunucu | Tüm ekranlar | CMS: Windows/Linux<br>Client: Windows/Linux/Android |
+| Kendi kendine / Self Servis      | Aynı cihaz           | Aynı cihaz   | Windows, Linux                                      |
+| Yerel Ağ / Bağlı ekranlar       | Yerel ağda bir cihaz veya sunucu | Tüm ekranlar | CMS: Windows/Linux<br>Client: Windows/Linux/Android |
 | Hosting / Bulut | Sunucu / Bulut       | Tüm ekranlar | Client: Windows/Linux/Android                       |
 
 ---
