@@ -170,7 +170,7 @@ ABP is a **modern, open-source application framework for ASP.NET Core**, offerin
 | Mode            | CMS Location     | Client       | Supported Platforms                                 |
 | --------------- | ---------------- | ------------ | --------------------------------------------------- |
 | Standalone      | Same device      | Same device  | Windows, Linux                                      |
-| Local Network   | One local device | All displays | CMS: Windows/Linux<br>Client: Windows/Linux/Android |
+| Local Network   | One local device or server | All displays | CMS: Windows/Linux<br>Client: Windows/Linux/Android |
 | Hosting / Cloud | Server / Cloud   | All displays | Client: Windows/Linux/Android                       |
 
 ---
