@@ -172,7 +172,7 @@ ABP, **ASP.NET Core** için geliştirilmiş, **modern ve açık kaynak** bir uyg
 | Mod             | CMS Konumu           | Client       | Desteklenen Platformlar                             |
 | --------------- | -------------------- | ------------ | --------------------------------------------------- |
 | Standalone      | Aynı cihaz           | Aynı cihaz   | Windows, Linux                                      |
-| Yerel Ağ        | Yerel ağda bir cihaz | Tüm ekranlar | CMS: Windows/Linux<br>Client: Windows/Linux/Android |
+| Yerel Ağ        | Yerel ağda bir cihaz veya sunucu | Tüm ekranlar | CMS: Windows/Linux<br>Client: Windows/Linux/Android |
 | Hosting / Bulut | Sunucu / Bulut       | Tüm ekranlar | Client: Windows/Linux/Android                       |
 
 ---
