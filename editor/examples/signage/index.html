@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Signage Editör Test</title>
+    <script src="../../lib/jquery-1.10.1.min.js"></script>
+    <script src="../../lib/jquery-migrate-1.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/holder/2.9.3/holder.min.js"></script>
+
+    <link rel="stylesheet" href="./assets/bootstrap.min.css" />
+    <link href="./assets/font-awesome.min.css" rel="stylesheet">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+
+    <!-- <link rel="stylesheet" href="../../dist/drawerJs.min.css"/>
+    <script src="../../dist/drawerJs.standalone.min.js"></script> -->
+
+    <link rel="stylesheet" href="../../dist/drawerJs.css" />
+    <script src="../../dist/drawerJs.standalone.js"></script>
+
+    <script>
+        /* function onclickTest() {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    console.log("test test");
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                } */
+    </script>
+
+    <style type="text/css">
+        .api-block {
+            width: 60%;
+            padding: 30px;
+            border: solid 2px #aaa;
+            margin-bottom: 50px;
+        }
+        
+        .api-subsection {
+            margin-bottom: 10px;
+        }
+        
+        .image-selector,
+        .bg-image-selector {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            background-size: cover;
+        }
+        
+        .image-selector:hover,
+        .bg-image-selector:hover {
+            outline: 2px solid black;
+        }
+        
+        .image-selector.checked,
+        .bg-image-selector.checked {
+            outline: 2px solid black;
+        }
+        
+        .image-selector img,
+        .bg-image-selector img {
+            display: none;
+            /* width:  100%; */
+            /* height: 100%; */
+        }
+        
+        .url-select {
+            font-size: 20px;
+            line-height: 1.5;
+        }
+        
+        .url-select option {
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+        
+        ul {
+            list-style: none;
+        }
+        
+        .plugin-list label {
+            display: inline-block;
+            width: 32%;
+            padding: 6px 7px;
+            font-size: 16px;
+            font-weight: normal;
+        }
+        
+        .plugin-list p {
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="panel-heading">
+            <h3>Signage Editor Test</h3>
+        </div>
+
+        <div class="panel-heading">
+            <div class="api-block">
+                <div>
+                    <p>
+                        <label style="width:60%; font-weight:normal;">Save / load canvas:</label>
+                    </p>
+                    <div class="btn btn-danger" onclick="addImage()"> addImage()</div>
+                    <div class="btn btn-danger" onclick="addText()"> addText()</div>
+                    <div class="btn btn-danger" onclick="addRoute()"> addRoute()</div>
+                    <div class="btn btn-danger" onclick="addRect()"> addRect()</div>
+                    <div class="btn btn-danger" onclick="addSign()"> addSign()</div>
+                    <div class="btn btn-danger" onclick="addTicker()"> addTicker()</div>
+                    <div class="btn btn-danger" onclick="addLabel()"> addLabel()</div>
+                    <div class="btn btn-success" onclick="onSave()"> save()</div>
+                    <div class="btn btn-success" onclick="onLoad()"> load()</div>
+                    <div class="btn btn-info" onclick="onSaveImage()"> saveImage()</div>
+                    <div class="btn btn-info" onclick="getCanvasBase64Image()"> getCanvasBase64Image()</div>
+                    <div class="btn btn-info" onclick="getSelectedObject()"> getSelectedObject()</div>
+                    <br/>
+                    <input type="number" id="fontInput" value="32" style="width: 70px;">
+                    <div class="btn" style="background-color: lightgoldenrodyellow;" onclick="setFontSize('30')"> fontSize()</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-heading">
+            <div class="api-block">
+             <img id="imgViewer" width="80" height="80">
+            </div>  
+        </div>
+
+        <div class="panel-body">
+            <div id="canvas-editor" style="position: relative;">
+            </div>
+            <input type="color" id="c" tabindex=-1 class="hidden">
+        </div>
+
+    </div>
+
+    <script>
+        var z = 1; //zoom factor
+        var canvas;
+        $(document).ready(function() {
+            var drawerPlugins = [
+                // Drawing tools
+                //'Pencil',
+                //'Eraser',
+                //'Line',
+                //'ArrowOneSide',
+                //'ArrowTwoSide',
+                //'Triangle',
+                'Rectangle',
+                'Text',
+                //'Route',
+                //'Park',
+                //'Circle',
+                'Image',
+                'BackgroundImage',
+                'BackgroundImageUrl',
+                //'Polygon',
+                //'ImageCrop',
+                // Drawing options
+                //'ColorHtml5',
+                'Color',
+                //'ShapeBorder',
+                //'BrushSize',
+                //'OpacityOption',
+                //'LineWidth',
+                //'StrokeWidth',
+                //'Resize',
+                'ShapeContextMenu',
+                'CloseButton',
+                'SaveButton',
+                'GridButton',
+                'ColorButton',
+                //'OvercanvasPopup',
+                //'OpenPopupButton',
+                //'MinimizeButton',
+                //'ToggleVisibilityButton',
+                //'MovableFloatingMode',
+                //'FullscreenModeButton',
+                'Zoom',
+                // 'TextLineHeight',
+                // 'TextAlign',
+                // 'TextFontFamily',
+                // 'TextFontSize',
+                // 'TextFontWeight',
+                // 'TextFontStyle',
+                // 'TextDecoration',
+                // 'TextColor',
+                // 'TextBackgroundColor',
+                'InfoControls'
+            ];
+
+            var saveContent = function() {
+                var html = $('#canvas-editor').html();
+                console.log(html);
+                console.log(canvas.id);
+                localStorage.setItem('html', html);
+                localStorage.setItem('canvas_id', canvas.id);
+            };
+            var loadContent = function() {
+                var html = localStorage.getItem('html');
+                var canvasId = localStorage.getItem('canvas_id');
+                if (html && canvasId) {
+                    $('#canvas-editor').html(html);
+                    canvas.id = canvasId;
+                    console.log(html);
+                    console.log(canvas.id);
+                    return true;
+                }
+                return false;
+            };
+
+
+            canvas = new DrawerJs.Drawer(null, {
+                plugins: drawerPlugins,
+                pluginsConfig: {
+                    Color: {
+                        alwaysVisible: true,
+                        showOpacityControl: true
+                    },
+                    Image: {
+                        scaleDownLargeImage: true,
+                        maxImageSizeKb: 10240, //1MB
+                        cropIsActive: true
+                    },
+                    BackgroundImage: {
+                        scaleDownLargeImage: true,
+                        maxImageSizeKb: 10240, //1MB
+                        //fixedBackgroundUrl: '/examples/redactor/images/vanGogh.jpg',
+                        //fixedBackgroundUrl: 'http://cdn2.hubspot.net/hubfs/2700250/Imported_Blog_Media/digital-signage-layout-8.jpg',
+                        imagePosition: 'stretch', // one of  'center', 'stretch', 'top-left', 'top-right', 'bottom-left', 'bottom-right'
+                        acceptedMIMETypes: ['image/jpeg', 'image/png', 'image/gif'],
+                        dynamicRepositionImage: true,
+                        dynamicRepositionImageThrottle: 100,
+                        cropIsActive: false
+                    },
+                    Text: {
+                        text: 'Lorem ipsum dolor sit amet zir babut kopik opukles assd ffff gggg',
+                        editIconMode: false,
+                        editIconSize: 'large',
+                        defaultValues: {
+                            fontFamily: 'Arial',
+                            fontSize: 32,
+                            lineHeight: 2,
+                            textFontWeight: 'bold'
+                        },
+                        predefined: {
+                            fontSize: [8, 12, 14, 16, 32, 40, 72],
+                            lineHeight: [1, 2, 3, 4, 6]
+                        }
+                    },
+                    Zoom: {
+                        enabled: true,
+                        showZoomTooltip: true,
+                        useWheelEvents: true,
+                        zoomStep: 1.05,
+                        defaultZoom: 1,
+                        maxZoom: 32,
+                        minZoom: 1,
+                        smoothnessOfWheel: 0,
+                        //Moving:
+                        enableMove: true,
+                        enableWhenNoActiveTool: true,
+                        enableButton: false
+                    }
+                },
+                toolbars: {
+                    popupButtonAlwaysVisible: false,
+                    drawingTools: {
+                        position: 'left',
+                        positionType: 'outside',
+                        customAnchorSelector: '#canvas-toolbar',
+                        compactType: 'scrollable',
+                        hidden: false,
+                        toggleVisibilityButton: false,
+                        fullscreenMode: {
+                            position: 'top',
+                            hidden: false,
+                            toggleVisibilityButton: false
+                        }
+                    },
+                    toolOptions: {
+                        position: 'top',
+                        positionType: 'outside',
+                        compactType: 'multiline',
+                        hidden: false,
+                        toggleVisibilityButton: false,
+                        fullscreenMode: {
+                            position: 'bottom',
+                            compactType: 'popup',
+                            hidden: true,
+                            toggleVisibilityButton: false
+                        }
+                    },
+                    infoTools: {
+                        position: 'bottom',
+                        positionType: 'outside',
+                        compactType: 'scrollable',
+                        hidden: false,
+                        toggleVisibilityButton: false,
+                        fullscreenMode: {
+                            position: 'bottom',
+                            compactType: 'popup',
+                            hidden: true,
+                            toggleVisibilityButton: false
+                        }
+                    },
+                    settings: {
+                        position: 'right',
+                        positionType: 'outside',
+                        compactType: 'scrollable',
+                        hidden: false,
+                        toggleVisibilityButton: false,
+                        fullscreenMode: {
+                            position: 'right',
+                            hidden: false,
+                            toggleVisibilityButton: false
+                        }
+                    }
+                },
+                contentConfig: {
+                    saveInHtml: false,
+                    saveCanvasData: function(canvasId, canvasData) {
+                        //localStorage.setItem('canvas_' + canvasId, JSON.stringify(canvasData));
+                        //console.log('canvas_' + canvasId + ': ' + JSON.stringify(canvasData));
+                        //saveContent();
+                    },
+                    loadCanvasData: function(canvasId) {
+                        //return localStorage.getItem('canvas_' + canvasId);
+                    },
+                    saveImageData: function(canvasId, imageData) {
+                        //localStorage.setItem('image_' + canvasId, JSON.stringify(imageData));
+                    },
+                    loadImageData: function(canvasId) {
+                        //return localStorage.getItem('image_' + canvasId);
+                    }
+                },
+                detectTouch: function() {
+                    //disable touch detection
+                    return false;
+                },
+                // properties that will be applied to fabricjs canvas on creation
+                canvasProperties: { //passed directly to fabricjs canvas
+                    backgroundColor: '#000',
+                    selectionColor: 'rgba(255, 255, 255, 0.3)',
+                    selectionDashArray: [3, 8],
+                    selectionLineWidth: 1,
+                    selectionBorderColor: '#5f5f5f'
+                },
+                // properties that will be applied to every created object
+                objectControls: { //passed directly to fabricjs objects
+                    //backgroundColor: '#ffe694',
+                    //fill: '#ffe694',
+                    //opacity: 0.6,
+                    borderColor: '#fff',
+                    borderOpacityWhenMoving: 0.4,
+                    cornerColor: '#fff',
+                    cornerSize: 12,
+                    hasBorders: true,
+                    lockScalingFlip: true
+                },
+                //defaultImageUrl: 'http://localhost:8081/examples/assets/bg2.jpg',
+                defaultActivePlugin: {
+                    name: 'Rectangle',
+                    mode: 'lastUsed'
+                },
+                activeColor: '#000',
+                transparentBackground: false,
+                backgroundCss: '#000',
+                align: 'editor', //one of 'left', 'right', 'center', 'inline', 'floating'
+                lineAngleTooltip: {
+                    enabled: true,
+                    color: 'blue',
+                    fontSize: 15
+                },
+                basePath: 'http://localhost:8082/examples/signage/',
+                editOnClick: true,
+                exitOnOutsideClick: false,
+                gridW: 48 * z,
+                gridH: 48 * z,
+                isOnlyRow: true,
+                debug: true,
+            }, 128,  96, z);
+
+            //if (!loadContent()) {
+            $('#canvas-editor').append(canvas.getHtml());
+            //}
+
+            canvas.onInsert();
+            canvas.api.startEditing();
+            canvas.api.setSize(80, 80, z);
+
+            //canvas.api.createGrid(48 * z, 48 * z, false, true);
+            //canvas.api.createRow(96 * z, 16 * z, true);
+            console.log("canvas id: " + canvas.id);
+            console.log("canvas zoomFactor: " + canvas.zoomFactor);
+            //uid();
+            //test();
+            //getCanvasAsImage('img1');
+            //onLoadTest();
+
+            //initObjectsInfos(canvas.fCanvas);
+
+            //addElements();
+
+        });
+
+
+
+        function getCanvasAsImage(imgid) {
+            canvas.api.removeGrid();
+            //var image = new Image();
+            //image.crossOrigin = "Anonymous";
+            var image = canvas.api.getCanvasAsImage();
+            //console.log(image);
+            $("#" + imgid).attr("src", image);
+
+            console.log(canvas.api.getCanvasJson());
+        }
+
+        function onCreateGridClick() {
+            canvas.api.createGrid();
+        }
+
+        function onRemoveGridClick() {
+            canvas.api.removeGrid();
+        }
+
+        function onStartEditing() {
+            canvas.api.startEditing();
+        }
+
+        function onStopEditing() {
+            canvas.api.stopEditing();
+        }
+
+        function onLoad() {
+            var serializedData = sessionStorage.drawerJsData;
+            var obj = JSON.parse(serializedData);
+            //console.log("back color", serializedData.background);
+            //colorpicker.fromString(serializedData.background);
+            canvas.api.loadCanvasFromData(serializedData);
+            canvas.api.setBackgroundColor(obj.background);
+            console.log(serializedData);
+        }
+
+        function onLoadTest() {
+            var obj = {
+                "objects": [
+                    /* {
+                      "type": "Zone",
+                      "left": 450,
+                      "top": 51,
+                      "width": 229,
+                      "height": 192,
+                      "fill": "#f70949",
+                      "scaleY": 1.05,
+                      "opacity": 0.6,
+                      "id": "16f3be76f12967223"
+                    },*/
+                    {
+                        "type": "Zone",
+                        "left": 330,
+                        "top": 130,
+                        "width": 86,
+                        "height": 121,
+                        "fill": "#4dc7f7",
+                        "opacity": 0.6,
+                        "id": "16f3be811d59622c4"
+                    }, {
+                        "type": "ZoneGroup",
+                        "left": 180,
+                        "top": 60,
+                        "width": 117,
+                        "height": 195,
+                        "fill": "#5fffbf",
+                        "opacity": 0.6,
+                        "id": "16f3bf17bae8bae5c"
+                    }
+                ],
+                "background": "#ffa"
+            }
+            var serializedData = JSON.stringify(obj);
+            canvas.api.loadCanvasFromData(serializedData);
+            //console.log(obj);
+        }
+
+        function onSave() {
+            var serializedData = canvas.api.getCanvasAsJSON();
+            sessionStorage.drawerJsData = serializedData;
+            console.log(serializedData);
+        }
+
+        function onSaveImage() {
+            canvas.api.saveCanvas();
+        }
+
+        function getCanvasBase64Image() {
+            var img = canvas.api.getCanvasAsImage();
+            $('#imgViewer').attr("src",img);
+
+        }
+
+        function addImage() {
+           
+                const options = {
+                    'left': 10,
+                    'top': 10,
+                    //'scaleX': 1,
+                    //'scaleY': 1,
+                    'width': 100,
+                    'height': 100,
+                    //'centerImage': true
+                    //'scaleDownLargeImage': true,
+                }
+
+                canvas.api.addImage('D:/PROJELER/Newton/Signa/Media/80x80 bmp/1.bmp', options);
+                //canvas.api.addImageFromUrl('C:/Projeler/Newton/Signa/Media/under-construction1.gif', options);
+           
+        }
+
+        function addText() {
+            const options = {
+                'width': 800,
+                'height': 50,
+                'left': 0,
+                'top': 0,
+                'fixedWidth': 800,
+                'fontFamily': 'Arial',
+                'fontSize': 32,
+                'lineHeight': 1,
+                'textAlign': 'center',
+                'textBackgroundColor': '#000',
+                'backgroundColor': 'transparent',
+                'fill': '#ffffff',
+                'editIconMode': false,
+                'editIconSize': 'small',
+                'mediaFileId': 1,
+                'mediaPlaylistId': null,
+                'center': true
+                //'hasControls': true
+            };
+            var text = "Text"; //"Lorem ipsum dolor sit amet zir babut kopik opukles aa vv bb nn n ";
+            //var text= "Lorem ipsum";
+            canvas.api.createText(0, 0, text, options);
+        }
+
+        function addRoute() {
+            const options = {
+                'left': 0,
+                'top': 0,
+                'fixedWidth': 800,
+                'fontFamily': 'Arial',
+                'fontSize': 62,
+                'lineHeight': 10,
+                'textAlign': 'center',
+                'textBackgroundColor': '#000',
+                'backgroundColor': '#000',
+                'fill': '#fff',
+                'editIconMode': false,
+                'editIconSize': 'small',
+                'mediaFileId': 1,
+                'mediaPlaylistId': null,
+                //'hasControls': true
+            };
+            var text = "FSM. KÖPRÜSÜ";
+            canvas.api.createRoute(text, options);
+        }
+
+        function addPark() {
+            const options = {
+                'width': 300,
+                'height': 150,
+                'left': 0,
+                'top': 0,
+                'fixedWidth': 800,
+                'fontFamily': 'Arial',
+                'fontSize': 32,
+                'lineHeight': 1,
+                'textAlign': 'center',
+                'textBackgroundColor': '#000',
+                'backgroundColor': '#000',
+                'fill': 'red',
+                'editIconMode': false,
+                'editIconSize': 'small',
+                'mediaFileId': 1,
+                'mediaPlaylistId': null,
+                //'hasControls': true
+            };
+            var text = "DOLU";
+            canvas.api.createPark(text, options);
+        }
+
+        function addSign() {
+            const options = {
+                'width': 600,
+                'height': 50,
+                'left': 0,
+                'top': 0,
+                'fixedWidth': 800,
+                'fontFamily': 'Arial',
+                'fontSize': 32,
+                'lineHeight': 1,
+                'textAlign': 'center',
+                'textBackgroundColor': '#000',
+                'backgroundColor': '#000',
+                'fill': '#fff',
+                'editIconMode': false,
+                'editIconSize': 'small',
+                'mediaFileId': 1,
+                'mediaPlaylistId': null,
+                //'hasControls': true
+            };
+            var text = "yarı dinamik trafik işareti";
+            canvas.api.createSign(text, options);
+        }
+
+        function addTicker() {
+            const options = {
+                'width': 800,
+                'height': 50,
+                'left': 0,
+                'top': 0,
+                'fixedWidth': 800,
+                'fontFamily': 'Arial',
+                'fontSize': 32,
+                'lineHeight': 1,
+                'textAlign': 'center',
+                'textBackgroundColor': '#000',
+                'backgroundColor': '#000',
+                'fill': '#fff',
+                'editIconMode': false,
+                'editIconSize': 'small',
+                'mediaFileId': 1,
+                'mediaPlaylistId': null,
+                //'hasControls': true
+            };
+            var text = "Lorem ipsum dolor sit amet zir babut kopik opukles";
+            //var text= "Lorem ipsum";
+            canvas.api.createTicker(0, 0, text, options);
+        }
+
+
+        function addLabel() {
+            var text = "Şişhane Otopark kat 5";
+            const options = {
+                'width': 100,
+                'height': 100,
+                'left': 0,
+                'top': 0,
+                'label': text,
+                'fill': '#000',
+                'mediaFileId': 1,
+                'mediaPlaylistId': null,
+                //'backgroundColor': '#95b3d7',
+                //'hasControls': true
+            };
+
+            canvas.api.createLabel(options);
+        }
+
+        function addRect() {
+            canvas.api.createRectangle();
+        }
+
+        function uid() {
+            var uuid = ((new Date).getTime().toString(16) + Math.floor(1E7 * Math.random()).toString(16));
+            console.log(uuid);
+        }
+
+        function scroller(direction) {
+            var far = $('.image-container').width() / 2 * direction;
+            //console.log(far);
+            var pos = $('.image-container').scrollLeft() + far;
+            //console.log(pos);
+            $('.image-container').animate({
+                scrollLeft: pos
+            }, 1000);
+        }
+
+        function testX() {
+            //var myDataURL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQCAYAAACAvzbMAAAKkklEQVR4nO3dMW4cRxqGYfWaoZOFADnYRMAm4gGcSKkV2KDCPcFeYQGHS0eG4TPsBTY1YQZySiV7AAqOlDiQAMGJU6E3tERB9WO+YrF6Zp4nE1rT3TND80Vp5nct67qu9wBgR3+ZfQMA7CcBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQORk9g3AUMsy9vy20+GIWYEAEBEQACICAkBEQACICAgAEQEBICIgAESWdfVFdo7X8l37+HpujgQ+xQoEgIiAABAREAAiAgJAREAAiAgIABEBASBiPxAO2tK5H0jvFIgxKw6ZFQgAEQEBICIgAEQEBICIgAAQERAAIgICQMQcCFNdvHg59PzlHMYvxYYghde//9E8Xj2/s8ePuq4/+vWr9N4/+80KBICIgAAQERAAIgICQERAAIgICAARAQEgsqw2LGCiy2K/jndX10Ov/+Vv/+l6/P/+9s/m8bMnp83jl8X5q+d/+vBB8/j1qzfN48+K+6v49XHcrEAAiAgIABEBASAiIABEBASAiIAAEBEQACLmQJiqmgOpVHMS1RxG5aLz/NWcR6/q+X/W+fy/KY779XHcrEAAiAgIABEBASAiIABEBASAiIAAEBEQACIns2+A/VbNcXzdef7q8ZfFnMPr//6refyLv37ePF7NUVRzHr3Pvzp/75xHdX8/d52dQ2cFAkBEQACICAgAEQEBICIgAEQEBICIgAAQMQfCVL1zEr1e//5H8/jXz8/bJ3haHC+MniPpvr79PmiwAgEgIiAARAQEgIiAABAREAAiAgJAREAAiCzr6ovefFq130evcr+PzsdXLq6um8dPHz5oHr9+9aZ5/Gzj+4mU5/frgQYrEAAiAgJAREAAiAgIABEBASAiIABEBASAiDkQmi5evOx6/GfFHESl2o9i9JzKu8FzIr2vT8WcByNZgQAQERAAIgICQERAAIgICAARAQEgIiAARE5m3wD7rZyDKOYozh4/6rp+NSdyr5gTqfbLePa8fX8/PW3PyVSvz9+L61eq+zfnwUhWIABEBASAiIAAEBEQACICAkBEQACICAgAEXMgdPn86vvm8bN//HhHd5Kp9sv4+bw9R/LNvfacRfX4X4vrV8o5GBjICgSAiIAAEBEQACICAkBEQACICAgAEQEBILKsqy+SH7Vfvpt7/a/+PfT0S7EfSGV9fn47N/IJy9O+8/vPl5msQACICAgAEQEBICIgAEQEBICIgAAQERAAIuZA2LTLzjmOXtV+Ict5334g1fkvi+P2A2EmKxAAIgICQERAAIgICAARAQEgIiAARAQEgIg5EIba+hxHpZrzWIs5j0o159HLnAgjWYEAEBEQACICAkBEQACICAgAEQEBICIgAETMgdBn8pxHZfScxWi9cyz2E2EkKxAAIgICQERAAIgICAARAQEgIiAARAQEgIg5EPoUcyDlHELn5Wfvp1Htd1I9v977NyfCTFYgAEQEBICIgAAQERAAIgICQERAAIgICAARcyA0VXMOld45hV6z5xx650Rmm/36sW1WIABEBASAiIAAEBEQACICAkBEQACICAgAkZPZN8BcFy9etv/C1XXfBZ6cNg/37hey9TmFre8n8q73/eWoWYEAEBEQACICAkBEQACICAgAEQEBICIgAETMgdB0+vBB8/j1qzfN471zCveKOYqt76dR6Z5T6dyvpVK9/9Uc0dnjR7d5O2yMFQgAEQEBICIgAEQEBICIgAAQERAAIgICQGRZ18kbJjBU9T393jmPZ8V+H368tq3cD6bQ+/NjTmS/WYEAEBEQACICAkBEQACICAgAEQEBICIgAETMgey52XMeFT9e27YU+4n8dHXddX5zIofNCgSAiIAAEBEQACICAkBEQACICAgAEQEBIHIy+wYYy5wHLdX71zsnUv38sd+sQACICAgAEQEBICIgAEQEBICIgAAQERAAIuZADpw5D3qMnhNhv1mBABAREAAiAgJAREAAiAgIABEBASAiIABEzIFs3MWLl83j5jyYyZzIcbMCASAiIABEBASAiIAAEBEQACICAkBEQACImAOZrJrzOH34oOv85jyYqZrzqH6+qzkSP99zWYEAEBEQACICAkBEQACICAgAEQEBICIgAETMgQxWfY999vV9j56Rzh4/ah6v5qDYNisQACICAkBEQACICAgAEQEBICIgAEQEBIDIshoEACYZPSfl19tYViAARAQEgIiAABAREAAiAgJAREAAiAgIABH7gQDTmNPYb1YgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARAQEgIiAABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQOZl9A9ytZVlm38JRW9e1eXzf35/q+XFYrEAAiAgIABEBASDiM5Aj9/btk6Hnv3//auj1t37+6vGV3vPPfjyHzQoEgIiAABAREAAiPgOBO7Tvcx7wPisQACICAkBEQACI+AzkyG19DmDfzz/79YORrEAAiAgIABEBASDiM5AjM3o/ikPf7wL4kxUIABEBASAiIABEltUmxrzn5mcU67fF3//hwz/v+hlIdf7KzevfNPv8s++v0nv/H53Pr5OjYgUCQERAAIgICAARcyBwQGbP+XBcrEAAiAgIABEBASBiDoQPfDSnUf39G3/eeQ5kx/Pv6tjOP/r19+uC91mBABAREAAiAgJAxBwI3CH7pXBIrEAAiAgIABEBASDiMxA2bWtzFsCfrEAAiAgIABEBASAiIABEBASAiIAAEBEQACLmQGgaPQfh/Id9fg6bFQgAEQEBICIgAETsiQ5AxAoEgIiAABAREAAiAgJAREAAiAgIABEBASDi/4XVaVn2+/8mVI0BjX5+s6/PWL1jZrN//mizAgEgIiAARAQEgIjPQG7Z27dPhp7//v2rrutXj6/0Pr/R1x/9+mz9/d36+Xtt/f6OjRUIABEBASAiIABEfAZy5MxZMJKfr8NmBQJAREAAiAgIABGfgdyxrX8PffQcyb6bPYdTmX3+2XM63C0rEAAiAgJAREAAiPgMZOMOfb+Mrd//6Nf/0N9fDpsVCAARAQEgIiAARJbVpsBdbv4b9fpt5/l++PDPu/4beXX9m+e/afTjK6PPv+v1R7/+t33+yuz3r7K195c2KxAAIgICQERAAIgICAARAQEgIiAARAQEgIg5kE4ffU+/+vs7nn/nOYFbvv5H99P5+NHXr86/6+NHv/779v7e9ut722779afNCgSAiIAAEBEQACL2A5ls9r/Bzt6PYvb1gZwVCAARAQEgIiAARHwGwk565wAYa/YcRq/Zc0bsxgoEgIiAABAREAAiPgOhyZwG+2z2nNWhswIBICIgAEQEBICIz0Bu2exPBA79+r3n3/r97fv5Zz+eu2UFAkBEQACICAgAEXuiAxCxAgEgIiAARAQEgIiAABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARAQEgMj/ARYVSURm9DRHAAAAAElFTkSuQmCC";
+            var myDataURL = "http://fabricjs.com/assets/jail_cell_bars.png";
+            //var canvas = new fabric.Canvas('canvas');
+            var img = new Image();
+            img.onload = function() {
+                // this is syncronous
+                var f_img = new fabric.Image(img);
+                canvas.api.backgroundImage(f_img);
+            };
+            img.src = myDataURL;
+        }
+
+        function test() {
+            var imageURL = "http://cdn2.hubspot.net/hubfs/2700250/Imported_Blog_Media/digital-signage-layout-8.jpg";
+            //var imageURL = "https://docs.google.com/uc?id=0B9o1MNFt5ld1N3k1cm9tVnZxQjg";
+            //var imageURL = "http://fabricjs.com/assets/jail_cell_bars.png";
+            //var imageURL = "http://image.freepik.com/free-photo/close-up-blank-old-concrete-wall_23-2147856094.jpg";
+            //var imageURL = "http://itknowledgeexchange.techtarget.com/overheard/files/2016/12/water-molecule.png";
+            var position = 'stretch';
+            var pos = {
+                    'imagePosition': 'stretch'
+                }
+                //canvas.api.setBackgroundImageFromUrl(imageURL,  {'imagePosition' : position});
+                //https://github.com/Rob--W/cors-anywhere/
+            var proxy = "https://cors-anywhere.herokuapp.com/"; //cors proxy demo: https://robwu.nl/cors-anywhere.html
+            //canvas.api.setBackgroundImageFromUrl(imageURL,  pos);
+            canvas.api.setBackgroundImageFromUrl(proxy + imageURL, pos);
+        }
+
+        function test1() {
+            var imgSrc = "http://fabricjs.com/assets/jail_cell_bars.png";
+            var imgEl = $('<img />');
+            imgEl.attr('src', imgSrc).load(function() {
+                new fabric.Image.fromURL(imgSrc, function(oImg) {
+                    //canvas.api.setBackgroundImage(oImg,  {'imagePosition' : 'center'});
+                    canvas.api.addImage(oImg, null);
+                    //canvas.add(oImg);
+                }, {
+                    crossOrigin: 'Anonymous'
+                });
+            });
+        }
+
+        function addElements(w = 800, h = 450) {
+            //var txt1 = "<span id='txtWH' class='toolbar-label toolbar-label-indicator noselect toolbar-placeholder toolbar-placeholder-top' style='float:right;position:relative; height:auto'>0 x 0</span>";
+            //var txt2 = "<span id='txtXY' class='toolbar-label toolbar-label-indicator noselect toolbar-placeholder toolbar-placeholder-top' style='float:right;position:relative; height:auto'>0 x 0</span>";
+
+            var span1 = "<span style='margin:5px'>En:</span>";
+            var txt1 = "<input type='number' id='txtW' name='txtWH' min='1' max='" + w + "' value='100' style='border:0px; background-color:#eee; color:#000'>";
+            var span2 = "<span style='margin:5px'>Boy:</span>";
+            var txt2 = "<input type='number' id='txtH' name='txtWH' min='1' max='" + h + "' value='100' style='border:0px; background-color:#eee; color:#000'>";
+
+            var span3 = "<span style='margin:5px'>X:</span>";
+            var txt3 = "<input type='number' id='txtX' name='txtXY' min='0' max='" + w + "' value='0' style='border:0px; background-color:#eee; color:#000'>";
+            var span4 = "<span style='margin:5px'>Y:</span>";
+            var txt4 = "<input type='number' id='txtY' name='txtXY' min='0' max='" + h + "' value='0' style='border:0px; background-color:#eee; color:#000'>";
+
+            var btn1 = "<a id='btnWH' href='javascript:void(0)' class='toolbar-button-icon' tabindex='-1' style='font-size:16px;margin-left:5px;margin-right:10px'><i class='fa fa-check'></i></a>";
+            var btn2 = "<a id='btnXY' href='javascript:void(0)' class='toolbar-button-icon' tabindex='-1' style='font-size:16px;margin-left:5px;margin-right:10px'><i class='fa fa-check'></i></a>";
+
+            var div = "<div class='noselect toolbar-placeholder toolbar-placeholder-top' style='float:right; position:relative; height:28px;'>" +
+                span1 + txt1 + span2 + txt2 + btn1 +
+                span3 + txt3 + span4 + txt4 + btn2 +
+                "</div>";
+
+            $(".toolbars-wrapper").append(div);
+        }
+
+        function onclickWH() {
+            console.log('deneme');
+        }
+
+        function getSelectedObject() {
+            console.log(canvas.api.getSelectedObject());
+        }
+
+        function setFontSize(size) {
+            size = $('#fontInput').val()
+
+            //canvas.api.getSelectedObject().set("fontSize", size);
+
+            var obj = canvas.fCanvas.getActiveObject();
+
+            var scale = obj.getObjectScaling();
+            console.log(scale);
+            console.log(obj);
+            obj.set("fontSize", size / scale.scaleX);
+            //obj.set("fontFamily", "Calibri");
+            canvas.fCanvas.renderAll();   
+        }
+
+        /*  canvas.api.settingsObject = function(fabricItem) {
+             console.log(fabricItem);
+         } */
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="lib/jquery-1.10.1.min.js"></script>
+    <script src="lib/jquery-migrate-1.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/holder/2.9.3/holder.min.js"></script>
+
+    <link rel="stylesheet" href="assets/bootstrap.min.css"/>
+    <link href="assets/font-awesome.min.css" rel="stylesheet">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+
+    <link rel="stylesheet" href="lib/drawerJs.css"/>
+    <script src="lib/drawerJs.standalone.js"></script>
+
+<style>
+.scroller-main {
+  text-align: center;
+  height: 110vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.title {
+ font-size: 42px;
+}
+.image {
+  height: 99px;
+  width: 176px;
+  font-size: 25px;
+  /*background: blue;*/
+  margin: 10px;
+  display: inline-block;
+  line-height: 100px; 
+  color: #ffffff;
+}
+.image-container {
+  vertical-align: middle;
+  display: inline-block;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 80%;
+}
+.prev, .next {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  height: 100%;
+  width: 100px;
+  cursor: pointer;
+  color: black;
+  transition: 0.6s ease;
+}
+.next {
+  margin-left: 5px;
+}
+.prev {
+  margin-right: 5px;
+}
+.prev:hover, .next:hover {
+  color: white;
+  height: 100%;
+  background-color: rgba(0,0,0,0.8);
+}
+</style>
+</head>
+
+<body>
+<div style="background-color: bisque; width: 900px; height: 600px;">
+	<h3 class=text-center>Editor Test</h3>
+	<div id="canvas-editor" contenteditable="true" style="position: absolute; top: 90px; left: 30px; background-color: darkgray;"></div>
+    <input type="color" id="c" tabindex=-1 class="hidden">
+    <div class="scroller-main">
+        <h3 class="title">Scrolling Image Slider</h1>
+        <div class="scroller-wrapper">
+          <a class="prev" onClick="scroller(-1)">&#10094;</a>
+          <div class="image-container">
+            <div class="image">
+                <img id="img1" crossOrigin="anonymous"  width="176px" height="99px" data-src='holder.js/176x99?outline=yes&theme=gray' onclick="getCanvasAsImage('img1')">
+            </div>
+            <div class="image">
+                <img id="img2" width="176px" height="99px" data-src='holder.js/176x99?outline=yes&theme=gray' onclick="getCanvasAsImage('img2')">
+            </div>
+            <div class="image">
+                <img id="img3" width="176px" height="99px" data-src='holder.js/176x99?outline=yes&theme=gray' onclick="getCanvasAsImage('img3')">
+            </div>
+            <div class="image">
+                <img id="img4" width="176px" height="99px" data-src='holder.js/176x99?outline=yes&theme=gray' onclick="getCanvasAsImage('img4')">
+            </div>
+            <div class="image">
+                <img id="img5" width="176px" height="99px" data-src='holder.js/176x99?outline=yes&theme=gray' onclick="getCanvasAsImage('img5')">
+            </div>
+          </div>
+          <a class="next" onClick="scroller(1)">&#10095;</a>
+        </div>
+      </div>
+</div>
+<script>
+    var canvas;
+    var localization_tr =  {
+  'Add Drawer': 'Add Drawer',
+  'Insert Drawer': 'Insert Drawer',
+  'Insert': 'Insert',
+  'Free drawing mode': 'Free drawing mode',
+  'SimpleWhiteEraser': 'SimpleWhiteEraser',
+  'Eraser': 'Eraser',
+  'Delete this canvas': 'Delete this canvas',
+  'Are you sure want to delete this canvas?': 'Are you sure want to delete this canvas?',
+
+  // canvas properties popup
+  'Size (px)': 'Size (px)',
+  'Position': 'Position',
+  'Inline': 'Inline',
+  'Left': 'Left',
+  'Center': 'Center',
+  'Right': 'Right',
+  'Floating': 'Floating',
+  'Canvas properties': 'Canvas properties',
+  'Background': 'Background',
+  'transparent': 'transparent',
+  'Cancel': 'Cancel',
+  'Save': 'Save',
+
+  // Fullscreen plugin
+  'Enter fullscreen mode': 'Enter fullscreen mode',
+  'Exit fullscreen mode': 'Exit fullscreen mode',
+
+  // shape context menu plugin
+  'Bring forward': 'Bring forward',
+  'Send backwards': 'Send backwards',
+  'Bring to front': 'Bring to front',
+  'Send to back': 'Send to back',
+  'Duplicate': 'Duplicate',
+  'Remove': 'Remove',
+
+  // brush size plugin
+  'Size:': 'Size:',
+
+  // colorpicker plugin
+  'Fill:': 'Renk:',
+  'Transparent': 'Transparan',
+
+  // shape border plugin
+  'Border type:': 'Kenarlık:',
+  'Border:': 'Kenar:',
+  'None': 'Yok',
+  'Opacity :': 'Saydamlık :',
+
+  // arrow plugin
+  'Draw an arrow': 'Draw an arrow',
+  'Draw a two-sided arrow': 'Draw a two-sided arrow',
+  'Lines and arrows': 'Lines and arrows',
+
+  // circle plugin
+  'Draw a circle': 'Draw a circle',
+
+  // line plugin
+  'Draw a line': 'Draw a line',
+
+  // rectangle plugin
+  'Draw a rectangle': 'Cerceve Ekle',
+
+  // triangle plugin
+  'Draw a triangle': 'Draw a triangle',
+
+  // polygon plugin
+  'Draw a Polygon': 'Draw a Polygon',
+  'Stop drawing a polygon': 'Stop drawing a polygon (esc)',
+  'Click to start a new line': 'Click to start a new line',
+
+  // text plugin
+  'Draw a text': 'Draw a text',
+  'Click to place a text': 'Click to place a text',
+  'Font:': 'Font:',
+
+  // movable floating mode plugin
+  'Move canvas': 'Move canvas',
+
+  // base shape
+  'Click to start drawing a ': 'Click to start drawing a '
+    };
+
+    $(document).ready(function () {
+        var drawerPlugins = [
+                // Drawing tools
+                //'Pencil',
+                //'Eraser',
+                //'Line',
+                //'ArrowOneSide',
+                //'ArrowTwoSide',
+                //'Triangle',
+                'Rectangle',
+                'Text',
+                //'Circle',
+                'Image',
+                'BackgroundImage',
+                'BackgroundImageUrl',
+                //'Polygon',
+                'ImageCrop',
+                // Drawing options
+                //'ColorHtml5',
+                'Color',
+                //'ShapeBorder',
+                //'BrushSize',
+                'OpacityOption',
+                //'LineWidth',
+                //'StrokeWidth',
+                //'Resize',
+                'ShapeContextMenu',
+                'CloseButton',
+                'SaveButton',
+                'GridButton',
+                'ColorButton',
+                //'OvercanvasPopup',
+                //'OpenPopupButton',
+                //'MinimizeButton',
+                //'ToggleVisibilityButton',
+                //'MovableFloatingMode',
+                //'FullscreenModeButton',
+                'Zoom',
+                'TextLineHeight',
+                'TextAlign',
+                'TextFontFamily',
+                'TextFontSize',
+                'TextFontWeight',
+                'TextFontStyle',
+                'TextDecoration',
+                'TextColor',
+                'TextBackgroundColor',
+                //'ThumbnailOption'
+            ];
+
+            var saveContent = function () {
+                var html = $('#canvas-editor').html();
+                console.log(html);
+                console.log(canvas.id);
+                localStorage.setItem('html', html);
+                localStorage.setItem('canvas_id', canvas.id);
+            };
+            var loadContent = function () {
+                var html = localStorage.getItem('html');
+                var canvasId = localStorage.getItem('canvas_id');
+                if (html && canvasId) {
+                    $('#canvas-editor').html(html);
+                    canvas.id = canvasId;
+                    console.log(html);
+                    console.log(canvas.id);
+                    return true;
+                }
+                return false;
+            };
+
+
+             canvas = new DrawerJs.Drawer(null, {
+                texts: localization_tr,
+                plugins: drawerPlugins,
+                pluginsConfig: {
+                    Image: {
+                        scaleDownLargeImage: true,
+                        maxImageSizeKb: 10240, //1MB
+                        cropIsActive: true
+                    },
+                    BackgroundImage: {
+                        scaleDownLargeImage: true,
+                        maxImageSizeKb: 10240, //1MB
+                        //fixedBackgroundUrl: '/examples/redactor/images/vanGogh.jpg',
+                        imagePosition: 'stretch',  // one of  'center', 'stretch', 'top-left', 'top-right', 'bottom-left', 'bottom-right'
+                        acceptedMIMETypes: ['image/jpeg', 'image/png', 'image/gif'],
+                        dynamicRepositionImage: true,
+                        dynamicRepositionImageThrottle: 100,
+                        cropIsActive: false
+                    },
+                    Text: {
+                        editIconMode: false,
+                        editIconSize: 'large',
+                        defaultValues: {
+                            fontSize: 72,
+                            lineHeight: 2,
+                            textFontWeight: 'bold'
+                        },
+                        predefined: {
+                            fontSize: [8, 12, 14, 16, 32, 40, 72],
+                            lineHeight: [1, 2, 3, 4, 6]
+                        }
+                    },
+                    Zoom: {
+                        enabled: true,
+                        showZoomTooltip: true,
+                        useWheelEvents: true,
+                        zoomStep: 1.05,
+                        defaultZoom: 1,
+                        maxZoom: 32,
+                        minZoom: 1,
+                        smoothnessOfWheel: 0,
+                        //Moving:
+                        enableMove: true,
+                        enableWhenNoActiveTool: true,
+                        enableButton: false
+                    }
+                },
+                toolbars: {
+                    popupButtonAlwaysVisible: true,
+                    drawingTools: {
+                        position: 'top',
+                        positionType: 'outside',
+                        customAnchorSelector: '#canvas-toolbar',
+                        compactType: 'scrollable',
+                        hidden: false,
+                        toggleVisibilityButton: false,
+                        fullscreenMode: {
+                            position: 'top',
+                            hidden: false,
+                            toggleVisibilityButton: false
+                        }
+                    },
+                    toolOptions: {
+                        position: 'bottom',
+                        positionType: 'outside',
+                        compactType: 'scrollable',
+                        hidden: false,
+                        toggleVisibilityButton: false,
+                        fullscreenMode: {
+                            position: 'bottom',
+                            compactType: 'popup',
+                            hidden: true,
+                            toggleVisibilityButton: false
+                        }
+                    },
+                    thumbnail: {
+                        position: 'bottom',
+                        positionType: 'outside',
+                        compactType: 'scrollable',
+                        hidden: true,
+                        toggleVisibilityButton: false,
+                        fullscreenMode: {
+                            position: 'bottom',
+                            compactType: 'popup',
+                            hidden: true,
+                            toggleVisibilityButton: false
+                        }
+                    },
+                    settings: {
+                        position: 'right',
+                        positionType: 'outside',
+                        compactType: 'scrollable',
+                        hidden: false,
+                        toggleVisibilityButton: false,
+                        fullscreenMode: {
+                            position: 'right',
+                            hidden: false,
+                            toggleVisibilityButton: false
+                        }
+                    }
+                },
+                contentConfig: {
+                    saveInHtml: false,
+                    saveCanvasData: function (canvasId, canvasData) {
+                        //localStorage.setItem('canvas_' + canvasId, JSON.stringify(canvasData));
+                        //saveContent();
+                    },
+                    loadCanvasData: function (canvasId) {
+                        //return localStorage.getItem('canvas_' + canvasId);
+                    },
+                    saveImageData: function (canvasId, imageData) {
+                        //localStorage.setItem('image_' + canvasId, JSON.stringify(imageData));
+                    },
+                    loadImageData: function (canvasId) {
+                        //return localStorage.getItem('image_' + canvasId);
+                    }
+                },
+                detectTouch: function () {
+                    //disable touch detection
+                    return false;
+                },
+                // properties that will be applied to fabricjs canvas on creation
+                canvasProperties: { //passed directly to fabricjs canvas
+                   //backgroundColor: '#ebebec',
+                   selectionColor: 'rgba(255, 255, 255, 0.3)',
+                   selectionDashArray: [3, 8],
+                   selectionLineWidth: 1,
+                   selectionBorderColor: '#5f5f5f'
+                },
+                // properties that will be applied to every created object
+                objectControls: { //passed directly to fabricjs objects
+                   //backgroundColor: '#ffe694',
+                   //fill: '#ffe694',
+                   //opacity: 0.6,
+                   borderColor: 'rgba(102,153,255,0.75)',
+                   borderOpacityWhenMoving: 0.4,
+                   cornerColor: 'rgba(102,153,255,0.5)',
+                   cornerSize: 12,
+                   hasBorders: false
+                }, 
+                //defaultImageUrl: 'http://localhost:8081/examples/assets/bg2.jpg',
+                defaultActivePlugin: { name: 'Rectangle', mode: 'lastUsed' },
+                activeColor: '#b8cce4',
+                transparentBackground: false,
+                backgroundCss: 'white',
+                align: 'left',  //one of 'left', 'right', 'center', 'inline', 'floating'
+                lineAngleTooltip: { enabled: true, color: 'blue', fontSize: 15 },
+                basePath: 'http://localhost:8081/examples/signage/',
+                editOnClick: true,
+                exitOnOutsideClick: false,
+                debug: true,
+            }, 800, 450);
+
+            //if (!loadContent()) {
+                $('#canvas-editor').append(canvas.getHtml());
+            //}
+
+            canvas.onInsert();
+            canvas.api.startEditing();
+            //canvas.api.createGrid();
+            console.log("canvas id: " + canvas.id);
+            //uid();
+            test();
+            getCanvasAsImage('img1');
+    });
+
+    function getCanvasAsImage(imgid) {
+      var image = canvas.api.getCanvasAsImage();
+      //console.log(image);
+      $("#" + imgid).attr("src", image);
+    }
+
+    function onCreateGridClick() {
+        canvas.api.createGrid();
+    }
+
+    function onRemoveGridClick() {
+        canvas.api.removeGrid();
+    }
+
+    function onStartEditing() {
+        canvas.api.startEditing();
+    }
+    function onStopEditing() {
+        canvas.api.stopEditing();
+    }
+
+    function uid(){
+        var uuid = ((new Date).getTime().toString(16)+Math.floor(1E7*Math.random()).toString(16));
+        console.log(uuid);
+    }
+
+    function scroller(direction){
+        var far = $( '.image-container').width()/2*direction;
+        //console.log(far);
+        var pos = $('.image-container').scrollLeft() + far;
+        //console.log(pos);
+        $('.image-container').animate( { scrollLeft: pos }, 1000);
+    }
+
+    function testX (){
+        //var myDataURL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQCAYAAACAvzbMAAAKkklEQVR4nO3dMW4cRxqGYfWaoZOFADnYRMAm4gGcSKkV2KDCPcFeYQGHS0eG4TPsBTY1YQZySiV7AAqOlDiQAMGJU6E3tERB9WO+YrF6Zp4nE1rT3TND80Vp5nct67qu9wBgR3+ZfQMA7CcBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQORk9g3AUMsy9vy20+GIWYEAEBEQACICAkBEQACICAgAEQEBICIgAESWdfVFdo7X8l37+HpujgQ+xQoEgIiAABAREAAiAgJAREAAiAgIABEBASBiPxAO2tK5H0jvFIgxKw6ZFQgAEQEBICIgAEQEBICIgAAQERAAIgICQMQcCFNdvHg59PzlHMYvxYYghde//9E8Xj2/s8ePuq4/+vWr9N4/+80KBICIgAAQERAAIgICQERAAIgICAARAQEgsqw2LGCiy2K/jndX10Ov/+Vv/+l6/P/+9s/m8bMnp83jl8X5q+d/+vBB8/j1qzfN48+K+6v49XHcrEAAiAgIABEBASAiIABEBASAiIAAEBEQACLmQJiqmgOpVHMS1RxG5aLz/NWcR6/q+X/W+fy/KY779XHcrEAAiAgIABEBASAiIABEBASAiIAAEBEQACIns2+A/VbNcXzdef7q8ZfFnMPr//6refyLv37ePF7NUVRzHr3Pvzp/75xHdX8/d52dQ2cFAkBEQACICAgAEQEBICIgAEQEBICIgAAQMQfCVL1zEr1e//5H8/jXz8/bJ3haHC+MniPpvr79PmiwAgEgIiAARAQEgIiAABAREAAiAgJAREAAiCzr6ovefFq130evcr+PzsdXLq6um8dPHz5oHr9+9aZ5/Gzj+4mU5/frgQYrEAAiAgJAREAAiAgIABEBASAiIABEBASAiDkQmi5evOx6/GfFHESl2o9i9JzKu8FzIr2vT8WcByNZgQAQERAAIgICQERAAIgICAARAQEgIiAARE5m3wD7rZyDKOYozh4/6rp+NSdyr5gTqfbLePa8fX8/PW3PyVSvz9+L61eq+zfnwUhWIABEBASAiIAAEBEQACICAkBEQACICAgAEXMgdPn86vvm8bN//HhHd5Kp9sv4+bw9R/LNvfacRfX4X4vrV8o5GBjICgSAiIAAEBEQACICAkBEQACICAgAEQEBILKsqy+SH7Vfvpt7/a/+PfT0S7EfSGV9fn47N/IJy9O+8/vPl5msQACICAgAEQEBICIgAEQEBICIgAAQERAAIuZA2LTLzjmOXtV+Ict5334g1fkvi+P2A2EmKxAAIgICQERAAIgICAARAQEgIiAARAQEgIg5EIba+hxHpZrzWIs5j0o159HLnAgjWYEAEBEQACICAkBEQACICAgAEQEBICIgAETMgdBn8pxHZfScxWi9cyz2E2EkKxAAIgICQERAAIgICAARAQEgIiAARAQEgIg5EPoUcyDlHELn5Wfvp1Htd1I9v977NyfCTFYgAEQEBICIgAAQERAAIgICQERAAIgICAARcyA0VXMOld45hV6z5xx650Rmm/36sW1WIABEBASAiIAAEBEQACICAkBEQACICAgAkZPZN8BcFy9etv/C1XXfBZ6cNg/37hey9TmFre8n8q73/eWoWYEAEBEQACICAkBEQACICAgAEQEBICIgAETMgdB0+vBB8/j1qzfN471zCveKOYqt76dR6Z5T6dyvpVK9/9Uc0dnjR7d5O2yMFQgAEQEBICIgAEQEBICIgAAQERAAIgICQGRZ18kbJjBU9T393jmPZ8V+H368tq3cD6bQ+/NjTmS/WYEAEBEQACICAkBEQACICAgAEQEBICIgAETMgey52XMeFT9e27YU+4n8dHXddX5zIofNCgSAiIAAEBEQACICAkBEQACICAgAEQEBIHIy+wYYy5wHLdX71zsnUv38sd+sQACICAgAEQEBICIgAEQEBICIgAAQERAAIuZADpw5D3qMnhNhv1mBABAREAAiAgJAREAAiAgIABEBASAiIABEzIFs3MWLl83j5jyYyZzIcbMCASAiIABEBASAiIAAEBEQACICAkBEQACImAOZrJrzOH34oOv85jyYqZrzqH6+qzkSP99zWYEAEBEQACICAkBEQACICAgAEQEBICIgAETMgQxWfY999vV9j56Rzh4/ah6v5qDYNisQACICAkBEQACICAgAEQEBICIgAEQEBIDIshoEACYZPSfl19tYViAARAQEgIiAABAREAAiAgJAREAAiAgIABH7gQDTmNPYb1YgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARAQEgIiAABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQOZl9A9ytZVlm38JRW9e1eXzf35/q+XFYrEAAiAgIABEBASDiM5Aj9/btk6Hnv3//auj1t37+6vGV3vPPfjyHzQoEgIiAABAREAAiPgOBO7Tvcx7wPisQACICAkBEQACI+AzkyG19DmDfzz/79YORrEAAiAgIABEBASDiM5AjM3o/ikPf7wL4kxUIABEBASAiIABEltUmxrzn5mcU67fF3//hwz/v+hlIdf7KzevfNPv8s++v0nv/H53Pr5OjYgUCQERAAIgICAARcyBwQGbP+XBcrEAAiAgIABEBASBiDoQPfDSnUf39G3/eeQ5kx/Pv6tjOP/r19+uC91mBABAREAAiAgJAxBwI3CH7pXBIrEAAiAgIABEBASDiMxA2bWtzFsCfrEAAiAgIABEBASAiIABEBASAiIAAEBEQACLmQGgaPQfh/Id9fg6bFQgAEQEBICIgAETsiQ5AxAoEgIiAABAREAAiAgJAREAAiAgIABEBASDi/4XVaVn2+/8mVI0BjX5+s6/PWL1jZrN//mizAgEgIiAARAQEgIjPQG7Z27dPhp7//v2rrutXj6/0Pr/R1x/9+mz9/d36+Xtt/f6OjRUIABEBASAiIABEfAZy5MxZMJKfr8NmBQJAREAAiAgIABGfgdyxrX8PffQcyb6bPYdTmX3+2XM63C0rEAAiAgJAREAAiPgMZOMOfb+Mrd//6Nf/0N9fDpsVCAARAQEgIiAARJbVpsBdbv4b9fpt5/l++PDPu/4beXX9m+e/afTjK6PPv+v1R7/+t33+yuz3r7K195c2KxAAIgICQERAAIgICAARAQEgIiAARAQEgIg5kE4ffU+/+vs7nn/nOYFbvv5H99P5+NHXr86/6+NHv/779v7e9ut722779afNCgSAiIAAEBEQACL2A5ls9r/Bzt6PYvb1gZwVCAARAQEgIiAARHwGwk565wAYa/YcRq/Zc0bsxgoEgIiAABAREAAiPgOhyZwG+2z2nNWhswIBICIgAEQEBICIz0Bu2exPBA79+r3n3/r97fv5Zz+eu2UFAkBEQACICAgAEXuiAxCxAgEgIiAARAQEgIiAABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARAQEgMj/ARYVSURm9DRHAAAAAElFTkSuQmCC";
+        var myDataURL = "http://fabricjs.com/assets/jail_cell_bars.png";
+        //var canvas = new fabric.Canvas('canvas');
+        var img = new Image();
+          img.onload = function() {
+          // this is syncronous
+         var f_img = new fabric.Image(img);
+         canvas.api.backgroundImage(f_img);
+        };
+        img.src = myDataURL;
+    }
+
+    function test (){
+        //var imageURL = "http://cdn2.hubspot.net/hubfs/2700250/Imported_Blog_Media/digital-signage-layout-8.jpg";
+        var imageURL = "https://docs.google.com/uc?id=0B9o1MNFt5ld1N3k1cm9tVnZxQjg";
+        //var imageURL = "http://fabricjs.com/assets/jail_cell_bars.png";
+        //var imageURL = "http://image.freepik.com/free-photo/close-up-blank-old-concrete-wall_23-2147856094.jpg";
+        //var imageURL = "http://itknowledgeexchange.techtarget.com/overheard/files/2016/12/water-molecule.png";
+        var position = 'stretch';
+        var pos = {
+            'imagePosition' : 'center'
+        }
+        //canvas.api.setBackgroundImageFromUrl(imageURL,  {'imagePosition' : position});
+        canvas.api.setBackgroundImageFromUrl(imageURL,  pos);
+    }
+
+</script>
+</body>
+</html>

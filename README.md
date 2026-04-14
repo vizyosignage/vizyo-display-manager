@@ -1,209 +1,58 @@
-# Vizyo Digital Signage
+﻿# Vizyo.Display.Manager
 
-**Vizyo Digital Signage** is an **open-source**, **cross-platform** **digital signage content management system (CMS)** designed to operate flexibly — from single self-service displays to local network screen groups and large-scale, centrally managed deployments over the internet.
+## About this solution
 
-The system features:
+This is a layered startup solution based on [Domain Driven Design (DDD)](https://abp.io/docs/latest/framework/architecture/domain-driven-design) practises. All the fundamental ABP modules are already installed. Check the [Application Startup Template](https://abp.io/docs/latest/solution-templates/layered-web-application) documentation for more info.
 
-* A **plugin-based architecture**
-* Extensibility using **Avalonia AXAML + C# Scripting**
-* A **web-based CMS built with the ABP Framework**
-* A **platform-aware CMS / Client execution model**
+### Pre-requirements
 
----
+* [.NET9.0+ SDK](https://dotnet.microsoft.com/download/dotnet)
+* [Node v18 or 20](https://nodejs.org/en)
 
-## 🚀 Overview
+### Configurations
 
-Vizyo provides a **modular and scalable architecture** where the **CMS and Client applications can run together or separately**, depending on the usage scenario.
+The solution comes with a default configuration that works out of the box. However, you may consider to change the following configuration before running your solution:
 
-### Supported Operation Modes
+* Check the `ConnectionStrings` in `appsettings.json` files under the `Vizyo.Display.Manager.Blazor` and `Vizyo.Display.Manager.DbMigrator` projects and change it if you need.
 
-* **Standalone (Self-Service)**
-* **Local Network**
-* **Centralized / Hosting (Cloud or Server-Based)**
+### Before running the application
 
----
+* Run `abp install-libs` command on your solution folder to install client-side package dependencies. This step is automatically done when you create a new solution, if you didn't especially disabled it. However, you should run it yourself if you have first cloned this solution from your source control, or added a new client-side package dependency to your solution.
+* Run `Vizyo.Display.Manager.DbMigrator` to create the initial database. This step is also automatically done when you create a new solution, if you didn't especially disabled it. This should be done in the first run. It is also needed if a new database migration is added to the solution later.
 
-## 🖥️ Operation Modes & Platform Behavior
+#### Generating a Signing Certificate
 
-### 🧩 Standalone (Self-Service Mode)
+In the production environment, you need to use a production signing certificate. ABP Framework sets up signing and encryption certificates in your application and expects an `openiddict.pfx` file in your application.
 
-* **CMS and Client applications run together on the same device**
-* Each display manages its own content
-* No server or internet connection required
-* **Supported only on Windows and Linux desktop platforms**
-
-📌 Use cases:
-
-* Kiosk systems
-* Single-screen retail or office displays
-
----
-
-### 🔗 Local Network Mode
-
-* One device on the local network runs as:
-
-  * **CMS + Client** (local server)
-* Other displays connect as:
-
-  * **Client-only**
-* No internet connection required
-* **Devices hosting CMS must run Windows or Linux desktop**
-
-📌 Use cases:
-
-* Schools
-* Offices
-* Multi-screen installations within a single location
-
----
-
-### 🌐 Centralized / Hosting Mode
-
-* CMS runs on:
-
-  * A **server or hosting environment**
-  * **ABP Framework–based Web CMS**
-* Client applications connect to the CMS over the internet
-* Displays can be managed across multiple locations
-
-📌 Use cases:
-
-* Enterprise deployments
-* Chain stores
-* Multi-location signage networks
-
----
-
-## 📱 Platform Support
-
-### 🖥️ Windows & Linux (Desktop)
-
-* CMS and Client can **run together on the same device**
-* Supports **Standalone** and **Local Network** modes
-* Plugin development and CMS management are available
-
-### 🤖 Android
-
-* **Client application only**
-* No CMS runs on Android
-* Content is managed via:
-
-  * A CMS on the local network, or
-  * A centralized (hosted) CMS
-* Optimized for lightweight, stable, display-focused usage
-
----
-
-## 🧩 Plugin-Based Architecture
-
-Vizyo is designed to be **fully extensible**.
-
-* Users can develop their own plugins
-* Plugin technologies:
-
-  * **Avalonia UI (AXAML)** for user interfaces
-  * **C# Scripting** for logic and behavior
-* Plugins can be used to build:
-
-  * Custom widgets
-  * Dynamic, data-driven displays
-  * Interactive signage components
-* The core system remains untouched while functionality is extended
-
----
-
-## 🌐 Web-Based CMS (ABP Framework)
-
-The Vizyo Web CMS is built using the **ABP Framework**, providing a modern and enterprise-ready foundation.
-
-### Why ABP Framework?
-
-ABP is a **modern, open-source application framework for ASP.NET Core**, offering built-in best practices and enterprise-grade features.
-
-### 🔑 Key ABP Features Used in Vizyo
-
-* **Modular Architecture**
-
-  * Clean separation of concerns
-  * Easy extensibility and maintainability
-
-* **Multi-Tenancy**
-
-  * Manage multiple organizations or customers from a single CMS
-  * Ideal for SaaS and large-scale deployments
-
-* **Role & Permission Management**
-
-  * Fine-grained access control
-  * Different roles for administrators, editors, and operators
-
-* **Authentication & Authorization**
-
-  * JWT, OAuth2, and OpenID Connect support
-  * Secure access to APIs and management UI
-
-* **RESTful API Layer**
-
-  * Structured backend APIs
-  * Seamless communication with client applications
-
-* **Built-in Admin UI**
-
-  * Ready-to-use management dashboards
-  * Faster development and consistent UX
-
-* **Database Abstraction**
-
-  * Supports multiple database providers
-  * Easy migration and scalability
-
-* **Localization**
-
-  * Multi-language support
-  * Ready for global deployments
-
----
-
-## 🏗️ Architecture Summary
-
-| Mode            | CMS Location     | Client       | Supported Platforms                                 |
-| --------------- | ---------------- | ------------ | --------------------------------------------------- |
-| Standalone      | Same device      | Same device  | Windows, Linux                                      |
-| Local Network   | One local device or server | All displays | CMS: Windows/Linux<br>Client: Windows/Linux/Android |
-| Hosting / Cloud | Server / Cloud   | All displays | Client: Windows/Linux/Android                       |
-
----
-
-## 📦 Installation (Planned)
+To generate a signing certificate, you can use the following command:
 
 ```bash
-git clone https://github.com/vizyosignage/vizyo-display-manager.git
-cd vizyo-display-manager
+dotnet dev-certs https -v -ep openiddict.pfx -p 67a2b6c2-e997-4e2a-a20e-c038a9f2ee37
 ```
 
-Installation and deployment documentation will be added.
+> `67a2b6c2-e997-4e2a-a20e-c038a9f2ee37` is the password of the certificate, you can change it to any password you want.
 
----
+It is recommended to use **two** RSA certificates, distinct from the certificate(s) used for HTTPS: one for encryption, one for signing.
 
-## 🛣️ Roadmap
+For more information, please refer to: [OpenIddict Certificate Configuration](https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html#registering-a-certificate-recommended-for-production-ready-scenarios)
 
-* [ ] Desktop CMS + Client integration
-* [ ] Android Client optimization
-* [ ] ABP-based Web CMS
-* [ ] Content scheduling
-* [ ] Media management
-* [ ] Plugin SDK & examples
-* [ ] Remote monitoring
+> Also, see the [Configuring OpenIddict](https://abp.io/docs/latest/Deployment/Configuring-OpenIddict#production-environment) documentation for more information.
 
----
+### Solution structure
 
-## 📄 License
+This is a layered monolith application that consists of the following applications:
 
-This project is open-source.
-License details will be added.
+* `Vizyo.Display.Manager.DbMigrator`: A console application which applies the migrations and also seeds the initial data. It is useful on development as well as on production environment.
+* `Vizyo.Display.Manager.Blazor`: ASP.NET Core Blazor Server application that is the essential web application of the solution.
 
----
 
-**Vizyo Digital Signage**
-*Centralized • Local • Self-Service • Platform-Aware*
+## Deploying the application
+
+Deploying an ABP application follows the same process as deploying any .NET or ASP.NET Core application. However, there are important considerations to keep in mind. For detailed guidance, refer to ABP's [deployment documentation](https://abp.io/docs/latest/Deployment/Index).
+
+### Additional resources
+
+You can see the following resources to learn more about your solution and the ABP Framework:
+
+* [Web Application Development Tutorial](https://abp.io/docs/latest/tutorials/book-store/part-1)
+* [Application Startup Template](https://abp.io/docs/latest/startup-templates/application/index)

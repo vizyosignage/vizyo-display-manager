@@ -1,0 +1,18 @@
+﻿{
+  "applications": {
+    "Vizyo.Display.Manager.Blazor": {
+      "type": "dotnet-project",
+      "launchUrl": "https://localhost:44368",
+      "path": "../../../src/Vizyo.Display.Manager.Blazor/Vizyo.Display.Manager.Blazor.csproj",
+      "kubernetesService": ".*-blazorserver$",
+      "healthCheckEndpoint": "/health-status",
+      "healthUiEndpoint": "/health-ui",
+      "execution": {
+        "order": 2
+      }
+}
+  },
+  "containers": {
+    "serviceName": "Manager-Containers",
+  }
+}

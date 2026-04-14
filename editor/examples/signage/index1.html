@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="../../lib/jquery-1.10.1.min.js"></script>
+    <script src="../../lib/jquery-migrate-1.2.1.min.js"></script>
+
+    <link rel="stylesheet" href="./assets/bootstrap.min.css"/>
+    <link href="./assets/font-awesome.min.css" rel="stylesheet">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+
+    <link rel="stylesheet" href="../../dist/drawerJs.min.css"/>
+    <script src="../../dist/drawerJs.standalone.min.js"></script>
+</head>
+
+<body>
+<div style="background-color: bisque; width: 900px; height: 600px;">
+	<h3 class=text-center>Editor Test</h3>
+	<div id="canvas-editor" contenteditable="true" style="position: absolute; top: 90px; left: 30px; background-color: darkgray;"></div>
+    <input type="color" id="c" tabindex=-1 class="hidden">
+</div>
+<script>
+    var localization_tr =  {
+  'Add Drawer': 'Add Drawer',
+  'Insert Drawer': 'Insert Drawer',
+  'Insert': 'Insert',
+  'Free drawing mode': 'Free drawing mode',
+  'SimpleWhiteEraser': 'SimpleWhiteEraser',
+  'Eraser': 'Eraser',
+  'Delete this canvas': 'Delete this canvas',
+  'Are you sure want to delete this canvas?': 'Are you sure want to delete this canvas?',
+
+  // canvas properties popup
+  'Size (px)': 'Size (px)',
+  'Position': 'Position',
+  'Inline': 'Inline',
+  'Left': 'Left',
+  'Center': 'Center',
+  'Right': 'Right',
+  'Floating': 'Floating',
+  'Canvas properties': 'Canvas properties',
+  'Background': 'Background',
+  'transparent': 'transparent',
+  'Cancel': 'Cancel',
+  'Save': 'Save',
+
+  // Fullscreen plugin
+  'Enter fullscreen mode': 'Enter fullscreen mode',
+  'Exit fullscreen mode': 'Exit fullscreen mode',
+
+  // shape context menu plugin
+  'Bring forward': 'Bring forward',
+  'Send backwards': 'Send backwards',
+  'Bring to front': 'Bring to front',
+  'Send to back': 'Send to back',
+  'Duplicate': 'Duplicate',
+  'Remove': 'Remove',
+
+  // brush size plugin
+  'Size:': 'Size:',
+
+  // colorpicker plugin
+  'Fill:': 'Arkaplan:',
+  'Transparent': 'Transparan',
+
+  // shape border plugin
+  'Border type:': 'Kenarlık:',
+  'Border:': 'Kenar:',
+  'None': 'Yok',
+  'Opacity:': 'Saydamlık:',
+
+  // arrow plugin
+  'Draw an arrow': 'Draw an arrow',
+  'Draw a two-sided arrow': 'Draw a two-sided arrow',
+  'Lines and arrows': 'Lines and arrows',
+
+  // circle plugin
+  'Draw a circle': 'Draw a circle',
+
+  // line plugin
+  'Draw a line': 'Draw a line',
+
+  // rectangle plugin
+  'Draw a rectangle': 'Cerceve Ekle',
+
+  // triangle plugin
+  'Draw a triangle': 'Draw a triangle',
+
+  // polygon plugin
+  'Draw a Polygon': 'Draw a Polygon',
+  'Stop drawing a polygon': 'Stop drawing a polygon (esc)',
+  'Click to start a new line': 'Click to start a new line',
+
+  // text plugin
+  'Draw a text': 'Draw a text',
+  'Click to place a text': 'Click to place a text',
+  'Font:': 'Font:',
+
+  // movable floating mode plugin
+  'Move canvas': 'Move canvas',
+
+  // base shape
+  'Click to start drawing a ': 'Click to start drawing a '
+    };
+
+    $(document).ready(function () {
+        var drawerPlugins = [
+                // Drawing tools
+                //'Pencil',
+                //'Eraser',
+                //'Line',
+                //'ArrowOneSide',
+                //'ArrowTwoSide',
+                //'Triangle',
+                'Rectangle',
+                'Text',
+                //'Circle',
+                'Image',
+                'BackgroundImage',
+                //'Polygon',
+                'ImageCrop',
+                // Drawing options
+                //'ColorHtml5',
+                'Color',
+                'ShapeBorder',
+                'BrushSize',
+                'OpacityOption',
+                'LineWidth',
+                'StrokeWidth',
+                //'Resize',
+                'ShapeContextMenu',
+                'CloseButton',
+                'SaveButton',
+                'GridButton',
+                'ColorButton',
+                //'OvercanvasPopup',
+                //'OpenPopupButton',
+                //'MinimizeButton',
+                //'ToggleVisibilityButton',
+                //'MovableFloatingMode',
+                //'FullscreenModeButton',
+                'Zoom',
+                'TextLineHeight',
+                'TextAlign',
+                'TextFontFamily',
+                'TextFontSize',
+                'TextFontWeight',
+                'TextFontStyle',
+                'TextDecoration',
+                'TextColor',
+                'TextBackgroundColor'
+            ];
+
+            var saveContent = function () {
+                var html = $('#canvas-editor').html();
+                console.log(html);
+                console.log(canvas.id);
+                localStorage.setItem('html', html);
+                localStorage.setItem('canvas_id', canvas.id);
+            };
+            var loadContent = function () {
+                var html = localStorage.getItem('html');
+                var canvasId = localStorage.getItem('canvas_id');
+                if (html && canvasId) {
+                    $('#canvas-editor').html(html);
+                    canvas.id = canvasId;
+                    console.log(html);
+                    console.log(canvas.id);
+                    return true;
+                }
+                return false;
+            };
+
+
+            var canvas = new DrawerJs.Drawer(null, {
+                texts: localization_tr,
+                plugins: drawerPlugins,
+                pluginsConfig: {
+                    Image: {
+                        scaleDownLargeImage: true,
+                        maxImageSizeKb: 10240, //1MB
+                        cropIsActive: true
+                    },
+                    BackgroundImage: {
+                        scaleDownLargeImage: true,
+                        maxImageSizeKb: 10240, //1MB
+                        //fixedBackgroundUrl: '/examples/redactor/images/vanGogh.jpg',
+                        imagePosition: 'stretch',  // one of  'center', 'stretch', 'top-left', 'top-right', 'bottom-left', 'bottom-right'
+                        acceptedMIMETypes: ['image/jpeg', 'image/png', 'image/gif'],
+                        dynamicRepositionImage: true,
+                        dynamicRepositionImageThrottle: 100,
+                        cropIsActive: false
+                    },
+                    Text: {
+                        editIconMode: false,
+                        editIconSize: 'large',
+                        defaultValues: {
+                            fontSize: 72,
+                            lineHeight: 2,
+                            textFontWeight: 'bold'
+                        },
+                        predefined: {
+                            fontSize: [8, 12, 14, 16, 32, 40, 72],
+                            lineHeight: [1, 2, 3, 4, 6]
+                        }
+                    },
+                    Zoom: { //http://fabricjs.com/fabric-intro-part-5
+                        enabled: true,
+                        showZoomTooltip: true,
+                        useWheelEvents: true,
+                        zoomStep: 1.05,
+                        defaultZoom: 1,
+                        maxZoom: 32,
+                        minZoom: 1,
+                        smoothnessOfWheel: 0,
+                        //Moving:
+                        enableMove: true,
+                        enableWhenNoActiveTool: false,
+                        enableButton: false
+                    }
+                },
+                toolbars: {
+                    popupButtonAlwaysVisible: true,
+                    drawingTools: {
+                        position: 'top',
+                        positionType: 'outside',
+                        customAnchorSelector: '#canvas-toolbar',
+                        compactType: 'scrollable',
+                        hidden: false,
+                        toggleVisibilityButton: false,
+                        fullscreenMode: {
+                            position: 'top',
+                            hidden: false,
+                            toggleVisibilityButton: false
+                        }
+                    },
+                    toolOptions: {
+                        position: 'bottom',
+                        positionType: 'outside',
+                        compactType: 'scrollable',
+                        hidden: false,
+                        toggleVisibilityButton: false,
+                        fullscreenMode: {
+                            position: 'bottom',
+                            compactType: 'popup',
+                            hidden: false,
+                            toggleVisibilityButton: false
+                        }
+                    },
+                    settings: {
+                        position: 'right',
+                        positionType: 'outside',
+                        compactType: 'scrollable',
+                        hidden: false,
+                        toggleVisibilityButton: false,
+                        fullscreenMode: {
+                            position: 'right',
+                            hidden: false,
+                            toggleVisibilityButton: false
+                        }
+                    }
+                },
+                contentConfig: {
+                    saveInHtml: false,
+                    saveCanvasData: function (canvasId, canvasData) {
+                        //localStorage.setItem('canvas_' + canvasId, JSON.stringify(canvasData));
+                        //saveContent();
+                    },
+                    loadCanvasData: function (canvasId) {
+                        //return localStorage.getItem('canvas_' + canvasId);
+                    },
+                    saveImageData: function (canvasId, imageData) {
+                        //localStorage.setItem('image_' + canvasId, JSON.stringify(imageData));
+                    },
+                    loadImageData: function (canvasId) {
+                        //return localStorage.getItem('image_' + canvasId);
+                    }
+                },
+                detectTouch: function () {
+                    //disable touch detection
+                    return false;
+                },
+                objectControls: {
+                   borderColor: 'rgba(102,153,255,0.75)',
+                   borderOpacityWhenMoving: 0.4,
+                   cornerColor: 'rgba(102,153,255,0.5)',
+                   cornerSize: 12,
+                   hasBorders: true
+                },
+                defaultImageUrl: 'http://localhost:8081/examples/assets/bg2.jpg',
+                defaultActivePlugin: { name: 'Rectangle', mode: 'lastUsed' },
+                activeColor: '#b8cce4',
+                transparentBackground: false,
+                backgroundCss: 'white',
+                align: 'left',  //one of 'left', 'right', 'center', 'inline', 'floating'
+                lineAngleTooltip: { enabled: true, color: 'blue', fontSize: 15 },
+                basePath: 'http://localhost:8081/examples/signage/',
+                editOnClick: true,
+                exitOnOutsideClick: false,
+                debug: true,
+            }, 800, 450);
+
+            //if (!loadContent()) {
+                $('#canvas-editor').append(canvas.getHtml());
+            //}
+
+            //$('body').off('change.setConfigValue').on('change.setConfigValue', '.toolbar-item select', collectData);
+            //$('body').off('click.setConfigValue').on('click.setConfigValue', 'input', collectData);
+            //collectData();
+            canvas.onInsert();
+            canvas.api.startEditing();
+            canvas.api.createGrid();
+            //uid();
+    });
+
+    function onCreateGridClick() {
+        window.drawer.api.createGrid();
+    }
+
+    function onRemoveGridClick() {
+        window.drawer.api.removeGrid();
+    }
+
+    function onStartEditing() {
+        window.drawer.api.startEditing();
+    }
+    function onStopEditing() {
+        window.drawer.api.stopEditing();
+    }
+
+    function uid(){
+        var uuid = ((new Date).getTime().toString(16)+Math.floor(1E7*Math.random()).toString(16));
+        console.log(uuid);
+    }
+</script>
+</body>
+</html>

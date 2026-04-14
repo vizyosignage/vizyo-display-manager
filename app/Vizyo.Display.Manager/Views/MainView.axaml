@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Vizyo.Display.Manager.ViewModels"
+			 xmlns:u="https://irihi.tech/ursa"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Vizyo.Display.Manager.Views.MainView"
+             x:DataType="vm:MainViewModel">
+  <!--<Design.DataContext>
+    <vm:MainViewModel />
+  </Design.DataContext>-->
+	<Viewbox Stretch="Uniform">
+	<!--<views:LayoutView Name="MainLayout"/>-->
+	<!--<Grid Name="mainGrid" Width="800" Height="450" Background="Black">-->
+		<Canvas Name="mainCanvas" Width="800" Height="450" Background="Gray">
+			<TextBlock Text="{Binding PluginsPath}" Canvas.Left="10" Canvas.Top="10" FontFamily="Consolas" Foreground="Black" FontSize="18"></TextBlock>
+			<u:Banner Name="banner" Canvas.Left="100" Canvas.Top="100"
+				   Classes.Bordered="True"
+				   Header="{Binding WelcomeText}"
+				   HorizontalContentAlignment="Center" 
+				   Content="{Binding CurrentLanguage}" />
+				   <!--Content="{loc:Translate Welcome}" />-->
+			<u:ImageViewer Source="avares://Vizyo.Display.Manager/Assets/avalonia-logo.ico" Width="100" Height="100" Canvas.Left="600" Canvas.Top="120" Opacity="0.4"></u:ImageViewer>
+            <u:Marquee Canvas.Left="100" Canvas.Top="300" Background="Brown"
+					   Content="Open Source Cross-Platform Digital Signage Content Management System"
+					   />
+		</Canvas>
+	<!--</Grid>-->
+	</Viewbox>
+</UserControl>

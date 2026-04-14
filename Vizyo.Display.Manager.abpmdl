@@ -1,0 +1,108 @@
+{
+  "template": "app",
+  "imports": {
+    "Volo.Abp.BasicTheme": {
+      "version": "9.3.5",
+      "isInstalled": true
+    },
+    "Volo.Abp.Account": {
+      "version": "9.3.5",
+      "isInstalled": true,
+      "creationTime": "10/06/2025 19:08:58 +00:00"
+    },
+    "Volo.Abp.OpenIddict": {
+      "version": "9.3.5",
+      "isInstalled": true,
+      "creationTime": "10/06/2025 19:08:58 +00:00"
+    },
+    "Volo.Abp.Identity": {
+      "version": "9.3.5",
+      "isInstalled": true,
+      "creationTime": "10/06/2025 19:08:58 +00:00"
+    },
+    "Volo.Abp.TenantManagement": {
+      "version": "9.3.5",
+      "isInstalled": true,
+      "creationTime": "10/06/2025 19:08:58 +00:00"
+    },
+    "Volo.Abp.SettingManagement": {
+      "version": "9.3.5",
+      "isInstalled": true,
+      "creationTime": "10/06/2025 19:08:58 +00:00"
+    },
+    "Volo.Abp.PermissionManagement": {
+      "version": "9.3.5",
+      "isInstalled": true,
+      "creationTime": "10/06/2025 19:08:58 +00:00"
+    },
+    "Volo.Abp.FeatureManagement": {
+      "version": "9.3.5",
+      "isInstalled": true,
+      "creationTime": "10/06/2025 19:08:58 +00:00"
+    }
+  },
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {}
+    }
+  },
+  "packages": {
+    "Vizyo.Display.Manager.Application": {
+      "path": "src/Vizyo.Display.Manager.Application/Vizyo.Display.Manager.Application.abppkg",
+      "folder": "src"
+    },
+    "Vizyo.Display.Manager.Application.Tests": {
+      "path": "test/Vizyo.Display.Manager.Application.Tests/Vizyo.Display.Manager.Application.Tests.abppkg",
+      "folder": "test"
+    },
+    "Vizyo.Display.Manager.Domain.Shared": {
+      "path": "src/Vizyo.Display.Manager.Domain.Shared/Vizyo.Display.Manager.Domain.Shared.abppkg",
+      "folder": "src"
+    },
+    "Vizyo.Display.Manager.Application.Contracts": {
+      "path": "src/Vizyo.Display.Manager.Application.Contracts/Vizyo.Display.Manager.Application.Contracts.abppkg",
+      "folder": "src"
+    },
+    "Vizyo.Display.Manager.HttpApi": {
+      "path": "src/Vizyo.Display.Manager.HttpApi/Vizyo.Display.Manager.HttpApi.abppkg",
+      "folder": "src"
+    },
+    "Vizyo.Display.Manager.HttpApi.Client": {
+      "path": "src/Vizyo.Display.Manager.HttpApi.Client/Vizyo.Display.Manager.HttpApi.Client.abppkg",
+      "folder": "src"
+    },
+    "Vizyo.Display.Manager.EntityFrameworkCore.Tests": {
+      "path": "test/Vizyo.Display.Manager.EntityFrameworkCore.Tests/Vizyo.Display.Manager.EntityFrameworkCore.Tests.abppkg",
+      "folder": "test"
+    },
+    "Vizyo.Display.Manager.EntityFrameworkCore": {
+      "path": "src/Vizyo.Display.Manager.EntityFrameworkCore/Vizyo.Display.Manager.EntityFrameworkCore.abppkg",
+      "folder": "src"
+    },
+    "Vizyo.Display.Manager.TestBase": {
+      "path": "test/Vizyo.Display.Manager.TestBase/Vizyo.Display.Manager.TestBase.abppkg",
+      "folder": "test"
+    },
+    "Vizyo.Display.Manager.Domain.Tests": {
+      "path": "test/Vizyo.Display.Manager.Domain.Tests/Vizyo.Display.Manager.Domain.Tests.abppkg",
+      "folder": "test"
+    },
+    "Vizyo.Display.Manager.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/Vizyo.Display.Manager.HttpApi.Client.ConsoleTestApp/Vizyo.Display.Manager.HttpApi.Client.ConsoleTestApp.abppkg",
+      "folder": "test"
+    },
+    "Vizyo.Display.Manager.DbMigrator": {
+      "path": "src/Vizyo.Display.Manager.DbMigrator/Vizyo.Display.Manager.DbMigrator.abppkg",
+      "folder": "src"
+    },
+    "Vizyo.Display.Manager.Blazor": {
+      "path": "src/Vizyo.Display.Manager.Blazor/Vizyo.Display.Manager.Blazor.abppkg",
+      "folder": "src"
+    },
+    "Vizyo.Display.Manager.Domain": {
+      "path": "src/Vizyo.Display.Manager.Domain/Vizyo.Display.Manager.Domain.abppkg",
+      "folder": "src"
+    }
+  }
+}
