@@ -1,58 +1,213 @@
-﻿# Vizyo.Display.Manager
+# Vizyo Digital Signage
 
-## About this solution
+**Vizyo Digital Signage**, **açık kaynak**, **platformdan bağımsız** bir **dijital signage içerik yönetim sistemi (CMS)**’dir.
+Tek ekranlı self servis kullanımlardan, yerel ağ üzerindeki ekran gruplarına ve internet üzerinden merkezi olarak yönetilen büyük ölçekli yapılara kadar esnek bir şekilde çalışacak biçimde tasarlanmıştır.
 
-This is a layered startup solution based on [Domain Driven Design (DDD)](https://abp.io/docs/latest/framework/architecture/domain-driven-design) practises. All the fundamental ABP modules are already installed. Check the [Application Startup Template](https://abp.io/docs/latest/solution-templates/layered-web-application) documentation for more info.
+Sistem şu özelliklere sahiptir:
 
-### Pre-requirements
+* **Eklenti (plugin) tabanlı mimari**
+* **Avalonia AXAML + C# Script** ile genişletilebilirlik
+* **ABP Framework** ile geliştirilmiş **web tabanlı CMS**
+* **Platforma duyarlı CMS / Client çalışma modeli**
 
-* [.NET9.0+ SDK](https://dotnet.microsoft.com/download/dotnet)
-* [Node v18 or 20](https://nodejs.org/en)
+---
 
-### Configurations
+## 🚀 Genel Bakış
 
-The solution comes with a default configuration that works out of the box. However, you may consider to change the following configuration before running your solution:
+Vizyo, kullanım senaryosuna bağlı olarak **CMS ve Client uygulamalarının birlikte veya ayrı** çalışabildiği **modüler ve ölçeklenebilir** bir mimari sunar.
 
-* Check the `ConnectionStrings` in `appsettings.json` files under the `Vizyo.Display.Manager.Blazor` and `Vizyo.Display.Manager.DbMigrator` projects and change it if you need.
+### Desteklenen Çalışma Modları
 
-### Before running the application
+* **Standalone (Self Servis)**
+* **Yerel Ağ**
+* **Merkezi / Hosting (Bulut veya Sunucu Tabanlı)**
 
-* Run `abp install-libs` command on your solution folder to install client-side package dependencies. This step is automatically done when you create a new solution, if you didn't especially disabled it. However, you should run it yourself if you have first cloned this solution from your source control, or added a new client-side package dependency to your solution.
-* Run `Vizyo.Display.Manager.DbMigrator` to create the initial database. This step is also automatically done when you create a new solution, if you didn't especially disabled it. This should be done in the first run. It is also needed if a new database migration is added to the solution later.
+---
 
-#### Generating a Signing Certificate
+## 🖥️ Çalışma Modları ve Platform Davranışı
 
-In the production environment, you need to use a production signing certificate. ABP Framework sets up signing and encryption certificates in your application and expects an `openiddict.pfx` file in your application.
+### 🧩 Standalone (Self Servis Mod)
 
-To generate a signing certificate, you can use the following command:
+* **CMS ve Client uygulamaları aynı cihazda birlikte çalışır**
+* Her ekran kendi içeriğini kendisi yönetir
+* Sunucu veya internet bağlantısı gerekmez
+* **Yalnızca Windows ve Linux masaüstü platformlarında desteklenir**
+
+📌 Kullanım alanları:
+
+* Kiosk sistemleri
+* Tek ekranlı mağaza veya ofis ekranları
+
+---
+
+### 🔗 Yerel Ağ Modu
+
+* Yerel ağdaki bir cihaz veya sunucu:
+
+  * **CMS + Client** olarak çalışır (bağlı ekranlar / yerel sunucu)
+   
+* Diğer ekranlar:
+
+  * **Sadece Client** olarak bağlanır
+* İnternet bağlantısı gerekmez
+* **CMS barındıran cihazların Windows veya Linux masaüstü çalıştırması gerekir**
+
+📌 Kullanım alanları:
+
+* Okullar
+* Ofisler
+* Fuar ekranları
+* Tek lokasyon içindeki çok ekranlı kurulumlar
+
+---
+
+### 🌐 Merkezi / Hosting Modu
+
+* CMS şu ortamlarda çalışır:
+
+  * **Bir sunucu veya hosting ortamı**
+  * **ABP Framework tabanlı Web CMS**
+* Client uygulamaları CMS’e internet üzerinden bağlanır
+* Ekranlar birden fazla lokasyondan yönetilebilir
+
+📌 Kullanım alanları:
+
+* Kurumsal dağıtımlar
+* Zincir mağazalar
+* Çok lokasyonlu signage ağları
+
+---
+
+## 📱 Platform Desteği
+
+### 🖥️ Windows & Linux (Masaüstü)
+
+* CMS ve Client **aynı cihazda birlikte çalışabilir**
+* **Standalone** ve **Yerel Ağ** modları desteklenir
+* Eklenti geliştirme ve CMS yönetimi yapılabilir
+
+### 🤖 Android
+
+* **Yalnızca Client uygulaması çalışır**
+* Android üzerinde CMS çalışmaz
+* İçerik yönetimi:
+
+  * Yerel ağdaki bir CMS üzerinden veya
+  * Merkezi (hosting) bir CMS üzerinden yapılır
+* Hafif, stabil ve ekran odaklı kullanım için optimize edilmiştir
+
+---
+
+## 🧩 Eklenti (Plugin) Tabanlı Mimari
+
+Vizyo, **tamamen genişletilebilir** olacak şekilde tasarlanmıştır.
+
+* Kullanıcılar kendi eklentilerini geliştirebilir
+* Eklenti teknolojileri:
+
+  * **Avalonia UI (AXAML)** → Kullanıcı arayüzleri
+  * **C# Script** → Mantık ve davranışlar
+* Eklentiler ile:
+
+  * Özel widget’lar
+  * Dinamik, veri odaklı ekranlar
+  * Etkileşimli signage bileşenleri
+    geliştirilebilir
+* Çekirdek sistem değiştirilmeden yeni işlevler eklenebilir
+
+---
+
+## 🌐 Web Tabanlı CMS (ABP Framework)
+
+Vizyo Web CMS, **ABP Framework** kullanılarak geliştirilmiştir ve modern, kurumsal seviyede bir altyapı sunar.
+
+### Neden ABP Framework?
+
+ABP, **ASP.NET Core** için geliştirilmiş, **modern ve açık kaynak** bir uygulama framework’üdür. Yerleşik en iyi pratikler ve kurumsal seviye özellikler sunar.
+
+### 🔑 Vizyo’da Kullanılan ABP Temel Özellikleri
+
+* **Modüler Mimari**
+
+  * Temiz sorumluluk ayrımı
+  * Kolay genişletilebilirlik ve bakım
+
+* **Multi-Tenancy (Çok Kiracılı Yapı)**
+
+  * Tek CMS üzerinden birden fazla organizasyon veya müşteri yönetimi
+  * SaaS ve büyük ölçekli dağıtımlar için idealdir
+
+* **Rol ve Yetkilendirme Yönetimi**
+
+  * İnce ayarlı erişim kontrolü
+  * Yönetici, editör ve operatör gibi farklı roller
+
+* **Kimlik Doğrulama ve Yetkilendirme**
+
+  * JWT, OAuth2 ve OpenID Connect desteği
+  * API’ler ve yönetim arayüzü için güvenli erişim
+
+* **RESTful API Katmanı**
+
+  * Yapılandırılmış backend API’leri
+  * Client uygulamalarıyla sorunsuz iletişim
+
+* **Hazır Yönetim Arayüzleri**
+
+  * Kullanıma hazır yönetim panelleri
+  * Hızlı geliştirme ve tutarlı kullanıcı deneyimi
+
+* **Veritabanı Soyutlaması**
+
+  * Birden fazla veritabanı sağlayıcısı desteği
+  * Kolay geçiş ve ölçeklenebilirlik
+
+* **Lokalizasyon**
+
+  * Çok dilli destek
+  * Global dağıtımlar için hazır altyapı
+
+---
+
+## 🏗️ Mimari Özeti
+
+| Mod             | CMS Konumu           | Client       | Desteklenen Platformlar                             |
+| --------------- | -------------------- | ------------ | --------------------------------------------------- |
+| Kendi kendine / Self Servis      | Aynı cihaz           | Aynı cihaz   | Windows, Linux                                      |
+| Yerel Ağ / Bağlı ekranlar       | Yerel ağda bir cihaz veya sunucu | Tüm ekranlar | CMS: Windows/Linux<br>Client: Windows/Linux/Android |
+| Hosting / Bulut | Sunucu / Bulut       | Tüm ekranlar | Client: Windows/Linux/Android                       |
+
+---
+
+## 📦 Kurulum (Planlanıyor)
 
 ```bash
-dotnet dev-certs https -v -ep openiddict.pfx -p 67a2b6c2-e997-4e2a-a20e-c038a9f2ee37
+git clone https://github.com/vizyosignage/vizyo-display-manager.git
+cd vizyo-display-manager
 ```
 
-> `67a2b6c2-e997-4e2a-a20e-c038a9f2ee37` is the password of the certificate, you can change it to any password you want.
+Kurulum ve dağıtım dokümantasyonu eklenecektir.
 
-It is recommended to use **two** RSA certificates, distinct from the certificate(s) used for HTTPS: one for encryption, one for signing.
+---
 
-For more information, please refer to: [OpenIddict Certificate Configuration](https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html#registering-a-certificate-recommended-for-production-ready-scenarios)
+## 🛣️ Yol Haritası
 
-> Also, see the [Configuring OpenIddict](https://abp.io/docs/latest/Deployment/Configuring-OpenIddict#production-environment) documentation for more information.
+* [ ] Masaüstü CMS + Client entegrasyonu
+* [ ] Android Client optimizasyonu
+* [ ] ABP tabanlı Web CMS
+* [ ] İçerik zamanlama
+* [ ] Medya yönetimi
+* [ ] Eklenti SDK ve örnekler
+* [ ] Uzaktan izleme
 
-### Solution structure
+---
 
-This is a layered monolith application that consists of the following applications:
+## 📄 Lisans
 
-* `Vizyo.Display.Manager.DbMigrator`: A console application which applies the migrations and also seeds the initial data. It is useful on development as well as on production environment.
-* `Vizyo.Display.Manager.Blazor`: ASP.NET Core Blazor Server application that is the essential web application of the solution.
+Bu proje açık kaynaklıdır.
+Lisans bilgisi eklenecektir.
 
+---
 
-## Deploying the application
-
-Deploying an ABP application follows the same process as deploying any .NET or ASP.NET Core application. However, there are important considerations to keep in mind. For detailed guidance, refer to ABP's [deployment documentation](https://abp.io/docs/latest/Deployment/Index).
-
-### Additional resources
-
-You can see the following resources to learn more about your solution and the ABP Framework:
-
-* [Web Application Development Tutorial](https://abp.io/docs/latest/tutorials/book-store/part-1)
-* [Application Startup Template](https://abp.io/docs/latest/startup-templates/application/index)
+**Vizyo Digital Signage**
+*Merkezi • Yerel • Self Servis • Platforma Duyarlı*
